@@ -1,7 +1,7 @@
 {
-  "name": "ecocash-zimbabwe-backend",
+  "name": "ecocash-backend",
   "version": "1.0.0",
-  "description": "EcoCash Zimbabwe backend — notification relay",
+  "description": "EcoCash Zimbabwe backend — Telegram approval relay",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -10,6 +10,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
   }
 }
